@@ -1,17 +1,17 @@
 class Product {
-  String productImage = "n/d";
-  String get image {return productImage;}
-  void setImage(String value) => productImage = value;
+  String _productImage = "n/d";
+  String get image {return _productImage;}
+  void setImage(String value) => _productImage = value;
 
-  String productName = "n/d";
-  String get name {return productName;}
-  void setName(String value) => productName = value;
+  String _productName = "n/d";
+  String get name {return _productName;}
+  void setName(String value) => _productName = value;
 
-  String productPrice = "n/d";
-  String get price {return productPrice;}
-  void setPrice(String value) => productPrice = value;
+  String _productPrice = "n/d";
+  String get price {return _productPrice;}
+  void setPrice(String value) => _productPrice = value;
 
-  Product(this.productImage, this.productName, this.productPrice);
+  Product(this._productImage, this._productName, this._productPrice);
 
 
 

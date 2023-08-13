@@ -74,7 +74,7 @@ class ListState extends State<ListWidget> {
                   child: Container(
                     height: 90,
                     padding: const EdgeInsets.all(5),
-                    child: Image.network(list[index].productImage),
+                    child: Image.network(list[index].image),
                   )
               ),
               Expanded(
@@ -82,7 +82,7 @@ class ListState extends State<ListWidget> {
                   child: Padding(
                     padding: const EdgeInsets.all(5),
                     child: Text(
-                      list[index].productName,
+                      list[index].name,
                       style: const TextStyle(
                         fontSize: 16,
                         color: Colors.black,
@@ -97,7 +97,7 @@ class ListState extends State<ListWidget> {
                   child: Padding(
                       padding: const EdgeInsets.all(5),
                       child: Text(
-                        list[index].productPrice,
+                        list[index].price,
                         style: const TextStyle(
                           fontSize: 16,
                           color: Colors.black,
