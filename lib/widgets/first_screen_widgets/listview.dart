@@ -1,33 +1,5 @@
 import 'package:flutter/material.dart';
-import 'models/product_model.dart';
-
-void main() {
-  runApp(const MaterialApp(
-    home: ScreenContainer(),
-    debugShowCheckedModeBanner: false,
-  ));
-}
-
-class ScreenContainer extends StatelessWidget {
-  const ScreenContainer({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Scaffold(
-        body: ListWidget(list: getList(),),
-        appBar: AppBar(
-          title: const Text(
-            "Keyboard Shop",
-            style: TextStyle(fontSize: 20, color: Colors.white),
-            textDirection: TextDirection.ltr,
-          ),
-          backgroundColor: Colors.black,
-        ),
-      ),
-    );
-  }
-}
+import '../../models/product.dart';
 
 class ListWidget  extends StatefulWidget {
   List<Product> list = [];
@@ -35,13 +7,13 @@ class ListWidget  extends StatefulWidget {
   ListWidget({super.key, required this.list});
 
   @override
-  ListState createState() => ListState(list);
+  ListState createState() => ListState(list: list);
 }
 
 class ListState extends State<ListWidget> {
   List<Product> list = [];
 
-  ListState(this.list);
+  ListState({required this.list});
 
   @override
   Widget build(BuildContext context) {
@@ -54,23 +26,23 @@ class ListState extends State<ListWidget> {
       ),
     );
   }
-  
+
   Widget listViewBuilder(BuildContext context, int index) {
     return GestureDetector(
       onTap: () {
-        //code...
+        Navigator.pushNamed(context, "info", arguments: list[index]);
       },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 3),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(17),
-          color: Colors.white
+            borderRadius: BorderRadius.circular(17),
+            color: Colors.white
         ),
         child: Expanded(
           child: Row(
             children: [
               Expanded(
-                flex: 3,
+                  flex: 3,
                   child: Container(
                     height: 90,
                     padding: const EdgeInsets.all(5),
@@ -80,16 +52,16 @@ class ListState extends State<ListWidget> {
               Expanded(
                   flex: 3,
                   child: Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: Text(
-                      list[index].name,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                      ),
-                      textDirection: TextDirection.ltr,
-                      softWrap: true,
-                    )
+                      padding: const EdgeInsets.all(5),
+                      child: Text(
+                        list[index].name,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                        ),
+                        textDirection: TextDirection.ltr,
+                        softWrap: true,
+                      )
                   )
               ),
               Expanded(
