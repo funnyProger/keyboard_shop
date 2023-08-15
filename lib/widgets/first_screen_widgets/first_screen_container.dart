@@ -8,7 +8,13 @@ class FirstScreenContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListWidget(list: getList()),
+      body: Container(
+        color: Colors.black87,
+        padding: const EdgeInsets.all(7),
+        child: ListWidget(list: getList()),
+      ),
+
+      //ListWidget(list: getList()),
       appBar: AppBar(
         title: const Text(
           "Keyboard Shop",

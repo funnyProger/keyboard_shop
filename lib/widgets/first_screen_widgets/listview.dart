@@ -17,13 +17,9 @@ class ListState extends State<ListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black87,
-      padding: const EdgeInsets.all(7),
-      child: ListView.builder(
-          itemCount: list.length,
-          itemBuilder: listViewBuilder
-      ),
+    return ListView.builder(
+        itemCount: list.length,
+        itemBuilder: listViewBuilder
     );
   }
 

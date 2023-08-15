@@ -8,7 +8,10 @@ class InfoScreenContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const Info(),
+      body: Container(
+        color: Colors.black87,
+        child: const Info(),
+      ),
       appBar: AppBar(
         title: const Text(
           "Keyboard Shop",
