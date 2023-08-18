@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:keyboard_shop/models/product.dart';
+import '../../models/basket.dart';
 
-class Info extends StatelessWidget {
+class InfoWidget extends StatelessWidget {
+  final Product product;
 
-  const Info({super.key});
+  const InfoWidget({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
-    final Product product = (ModalRoute.of(context)!.settings.arguments
-        ?? Product(image: "", name: "No data", price: "No data", description: "No data")) as Product;
 
-    return Container(
+    return
+      Container(
         margin: const EdgeInsets.only(left: 8, top: 8, right: 8),
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.only(
@@ -22,7 +24,7 @@ class Info extends StatelessWidget {
         child: Column(
           children: [
             Expanded(
-              flex: 5,
+              flex: 8,
               child: Padding(
                   padding: const EdgeInsets.all(10),
                   child: Container(
@@ -35,7 +37,7 @@ class Info extends StatelessWidget {
               ),
             ),
             Expanded(
-                flex: 1,
+                flex: 2,
                 child: Container(
                   padding: const EdgeInsets.only(left: 15),
                   child: Row(
@@ -59,7 +61,7 @@ class Info extends StatelessWidget {
                           padding: const EdgeInsets.only(top: 10),
                           alignment: Alignment.topCenter,
                           child: Text(
-                            product.price,
+                            getString(product.price),
                             style: const TextStyle(fontSize: 20, color: Colors.white),
                             textDirection: TextDirection.ltr,
                             textAlign: TextAlign.center,
@@ -72,20 +74,62 @@ class Info extends StatelessWidget {
                 )
             ),
             Expanded(
-              flex: 6,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                padding: const EdgeInsets.only(left: 15, top: 5, right: 15, bottom: 15),
-                child: Text(
-                  "Описание: \n\n${product.description}",
-                  style: const TextStyle(fontSize: 17, color: Colors.white),
-                  textDirection: TextDirection.ltr,
-                ),
+              flex: 11,
+              child: Stack(
+                children: [
+                  SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    padding: const EdgeInsets.only(left: 15, top: 5, right: 15, bottom: 80),
+                    child: Text(
+                      "Описание: \n\n${product.description}",
+                      style: const TextStyle(fontSize: 17, color: Colors.white),
+                      textDirection: TextDirection.ltr,
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.bottomCenter,
+                    child: GestureDetector(
+                      onTap: () {
+                        Basket.getInstance().addToBasket(product);
+                        Fluttertoast.showToast(
+                          msg: "Успешно добавлено",
+                          toastLength: Toast.LENGTH_SHORT,
+                          backgroundColor: Colors.green,
+                          textColor: Colors.white,
+                          fontSize: 15,
+                        );
+                      },
+                      child: Container(
+                        height: 50,
+                        width: 130,
+                        alignment: Alignment.center,
+                        margin: const EdgeInsets.only(top: 15, bottom: 15),
+                        decoration: BoxDecoration(
+                          color: Colors.indigoAccent,
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: const Text(
+                          "В корзину",
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                          ),
+                          textDirection: TextDirection.ltr,
+                        ),
+                      ),
+                    )
+                  )
+
+                ],
               ),
-            ),
+            )
+
           ],
         )
     );
+
+
   }
+
 
 }

@@ -1,7 +1,7 @@
 class Product {
   final String image;
   final String name;
-  final String price;
+  final int price;
   final String description;
 
   Product({
@@ -12,13 +12,34 @@ class Product {
   });
 }
 
+//этот метод преобразует цену типа Int в тип String нужного вида
+String getString(int price) {
+  String str = price.toString();
+  List<String> listChar = str.split('').toList();
+  str = '';
+  for(int i = 0; i <= listChar.length - 1; i++) {
+    if(i == 1 && listChar.length == 5) {
+      str = '$str${listChar[i]} ';
+    } else if(i == 2 && listChar.length == 6) {
+      str = '$str${listChar[i]} ';
+    } else if((i == 0 || i == 3) && listChar.length == 7) {
+      str = '$str${listChar[i]} ';
+    } else if(i == listChar.length - 1) {
+      str = '$str${listChar[i]} ₽';
+    } else {
+      str = str + listChar[i];
+    }
+  }
+  return str;
+}
+
 List<Product> getList() {
   final List<Product> list = [];
   list.add(
       Product(
           image: "https://static.insales-cdn.com/r/kWk6FOodnv0/rs:fit:1920:1920:1/plain/images/products/1/7819/736894603/1.jpg@webp",
           name: "Leopold FC650M Double Space BT Gray",
-          price: "14 490 ₽",
+          price: 14490,
           description: "Leopold — производитель, который ставит качество и "
               "надежность выше всего остального, именно поэтому вы скорее всего "
               "даже и не слышали о нем: эта компания не вливает тонны средств в "
@@ -42,7 +63,7 @@ List<Product> getList() {
       Product(
           image: "https://static.insales-cdn.com/r/W2RJuOv3qpQ/rs:fit:1920:1920:1/plain/images/products/1/4067/592842723/Vortex_Tab_60.jpg@webp",
           name: "Vortex Tab 60",
-          price: "13 990 ₽",
+          price: 13990,
           description: "Vortexgear – известный в кругах любителей качественной "
               "механики Тайваньский производитель. Выделяются от других "
               "производителей своим желанием упаковать в компактный корпус "
@@ -70,7 +91,7 @@ List<Product> getList() {
       Product(
           image: "https://static.insales-cdn.com/r/YbxHax8eKXc/rs:fit:1920:1920:1/plain/images/products/1/7687/671874567/12.jpg@webp",
           name: "Varmilo Shurikey Saizo 001",
-          price: "15 990 ₽",
+          price: 15990,
           description: "Название Shurikey происходит от сочетания слова shuriken "
               "(сюрикэн), знаменитого оружия, со словом key (клавиша). Модель "
               "Saizo названа в честь Киригакурэ Сайзо, который входил в состав "
@@ -83,7 +104,7 @@ List<Product> getList() {
       Product(
           image: "https://static.insales-cdn.com/r/hhJqMIFyYQs/rs:fit:1920:1920:1/plain/images/products/1/6083/595982275/1_Varmilo_Moonlight_87_white.webp",
           name: "Varmilo Moonlight V2 87",
-          price: "15 490 ₽",
+          price: 15490,
           description: "Varmilo — яркая звезда на небосводе китайских "
               "производителей клавиатур. Смазанные стабилизаторы, ручная сборка, "
               "эстетичный дизайн - каждая клавиатура Varmilo как произведение "
@@ -101,7 +122,7 @@ List<Product> getList() {
       Product(
           image: "https://static.insales-cdn.com/r/YR6trYOeK-A/rs:fit:1920:1920:1/plain/images/products/1/151/603021463/87.jpg@webp",
           name: "Varmilo Yakumo V2 87",
-          price: "16 490 ₽",
+          price: 16490,
           description: "Varmilo — яркая звезда на небосводе китайских "
               "производителей клавиатур. Смазанные стабилизаторы, ручная сборка, "
               "эстетичный дизайн — каждая клавиатура Varmilo как произведение "
@@ -123,7 +144,7 @@ List<Product> getList() {
       Product(
           image: "https://static.insales-cdn.com/r/7-tZjMUuf_0/rs:fit:1920:1920:1/plain/images/products/1/5025/595923873/1.jpg@webp",
           name: "Varmilo Vintage Days CMYK V2 87",
-          price: "15 490 ₽",
+          price: 15490,
           description: "Varmilo — яркая звезда на небосводе китайских "
               "производителей клавиатур. Смазанные стабилизаторы, ручная "
               "сборка, эстетичный дизайн — каждая клавиатура Varmilo как "
@@ -144,7 +165,7 @@ List<Product> getList() {
       Product(
           image: "https://static.insales-cdn.com/r/4kMHg6KV1GY/rs:fit:1920:1920:1/plain/images/products/1/7317/706280597/varmilo-beijing-opera-V2-87.jpg@webp",
           name: "Varmilo Beijing Opera V2 87",
-          price: "17 990 ₽",
+          price: 17990,
           description: "Varmilo — яркая звезда на небосводе китайских "
               "производителей клавиатур. Смазанные стабилизаторы, ручная сборка, "
               "эстетичный дизайн - каждая клавиатура Varmilo как произведение "
@@ -162,7 +183,7 @@ List<Product> getList() {
       Product(
           image: "https://static.insales-cdn.com/r/NBiRx35d0Qc/rs:fit:1920:1920:1/plain/images/products/1/5797/596137637/%D0%B3%D0%BB%D0%B0%D0%B2%D0%BD%D0%B0%D1%8F.jpg@webp",
           name: "Varmilo Sea Melody V2 87",
-          price: "15 990 ₽",
+          price: 15990,
           description: "Varmilo — яркая звезда на небосводе китайских "
               "производителей клавиатур. Смазанные стабилизаторы, ручная "
               "сборка, эстетичный дизайн - каждая клавиатура Varmilo как "
@@ -180,7 +201,7 @@ List<Product> getList() {
       Product(
           image: "https://static.insales-cdn.com/r/FaSx3P7I-n0/rs:fit:1920:1920:1/plain/images/products/1/3294/653790430/1.jpg@webp",
           name: "Varmilo Minilo Eucalyptus VXH67 Hot-Swap",
-          price: "13 490 ₽",
+          price: 13490,
           description: "Varmilo — яркая звезда на небосводе китайских "
               "производителей клавиатур. Смазанные стабилизаторы, ручная сборка, "
               "эстетичный дизайн — каждая клавиатура Varmilo как произведение "
@@ -197,7 +218,7 @@ List<Product> getList() {
       Product(
           image: "https://static.insales-cdn.com/r/RgpNJdLfuJk/rs:fit:1920:1920:1/plain/images/products/1/753/592855793/Keychron_K3_V2_RGB.jpg@webp",
           name: "Keychron K3 V2 RGB",
-          price: "11 490 ₽",
+          price: 11490,
           description: "Команда энтузиастов из Keychron сделали прорыв в мире "
               "низкопрофильных клавиатур: Hot-Swap, низкопрофильные оптические "
               "переключатели, RGB подсветка, тонкий алюминиевый корпус в "
@@ -208,7 +229,7 @@ List<Product> getList() {
       Product(
           image: "https://static.insales-cdn.com/r/itEZG1DUFto/rs:fit:1920:1920:1/plain/images/products/1/4514/647926178/keychron-k3-pro-qmk.jpg@webp",
           name: "Keychron K3 Pro QMK/VIA",
-          price: "12 990 ₽",
+          price: 12990,
           description: "Энтузиасты из Keychron сделали модель K3 еще лучше: K3 "
               "Pro — первая в мире низкопрофильная механическая клавиатура с "
               "поддержкой QMK/VIA, которая позволяет идеально настроить "
@@ -219,7 +240,7 @@ List<Product> getList() {
       Product(
           image: "https://static.insales-cdn.com/r/jDDdcT7GRHw/rs:fit:1920:1920:1/plain/images/products/1/4080/735727600/1.jpg@webp",
           name: "Durgod K330W Ice Cream",
-          price: "11 990 ₽",
+          price: 11990,
           description: "K330W — легкая, компактная, со смазанными "
               "стабилизаторами, имеет 2 беспроводных режима и работает "
               "до 8 месяцев без подзарядки.",
@@ -229,7 +250,7 @@ List<Product> getList() {
       Product(
           image: "https://static.insales-cdn.com/r/GBKjt0z66AU/rs:fit:1920:1920:1/plain/images/products/1/1697/592864929/Durgod_Fusion_Original.jpg@webp",
           name: "Durgod Fusion Original",
-          price: "11 690 ₽",
+          price: 11690,
           description: "Fusion — это пламенный привет из 80-х всем любителям "
               "ретро эстетики. Имеет два беспроводных режима, смазанные "
               "стабилизаторы и неубиваемые кейкапы. \nВ клавиатуре на "
@@ -241,7 +262,7 @@ List<Product> getList() {
       Product(
           image: "https://static.insales-cdn.com/r/c8Jzw3wEhUo/rs:fit:1920:1920:1/plain/images/products/1/3069/592866301/Durgod_Fusion_Navigator.jpg@webp",
           name: "Durgod Fusion Navigator",
-          price: "13 990 ₽",
+          price: 13990,
           description: "Fusion — это пламенный привет из 80-х всем любителям "
               "ретро эстетики. Имеет два беспроводных режима, смазанные "
               "стабилизаторы и неубиваемые кейкапы. \nВ клавиатуре на "
@@ -253,7 +274,7 @@ List<Product> getList() {
       Product(
           image: "https://static.insales-cdn.com/r/P2w23742YDg/rs:fit:1920:1920:1/plain/images/products/1/2808/592866040/Durgod_Fusion_Steam.jpg@webp",
           name: "Durgod Fusion Steam",
-          price: "13 990 ₽",
+          price: 13990,
           description: "Fusion — это пламенный привет из 80-х всем любителям "
               "ретро эстетики. Имеет два беспроводных режима, смазанные "
               "стабилизаторы и неубиваемые кейкапы. \nВ клавиатуре на "
@@ -265,7 +286,7 @@ List<Product> getList() {
       Product(
           image: "https://static.insales-cdn.com/r/V_ZUvn3HGg8/rs:fit:1920:1920:1/plain/images/products/1/3621/685837861/Halo65.jpg@webp",
           name: "NuPhy Halo65 Matte Black",
-          price: "15 990 ₽",
+          price: 15990,
           description: "NuPhy Halo65 — это клавиатура 65% формата с особой "
               "фишкой: подсветка здесь исходит не только от диодов под "
               "переключателями, но и от корпуса, благодаря внутренней вставке. "
@@ -278,7 +299,7 @@ List<Product> getList() {
       Product(
           image: "https://static.insales-cdn.com/r/DWXdViqS-Q8/rs:fit:1920:1920:1/plain/images/products/1/7771/598769243/1.jpg@webp",
           name: "NuPhy Air60",
-          price: "13 490 ₽",
+          price: 13490,
           description: "NuPhy Air60 — лоупрофильная беспроводная механическая "
               "клавиатура 60%. Компактная, тонкая, красивая.",
       )
@@ -287,7 +308,7 @@ List<Product> getList() {
       Product(
           image: "https://static.insales-cdn.com/r/25m1CsMNJ2s/rs:fit:1920:1920:1/plain/images/products/1/3390/719359294/1__2_.jpg@webp",
           name: "NuPhy Halo75 Matte Black",
-          price: "17 990 ₽",
+          price: 17990,
           description: "NuPhy Halo65 — это клавиатура 65% формата с особой "
               "фишкой: подсветка здесь исходит не только от диодов под "
               "переключателями, но и от корпуса, благодаря внутренней вставке. "
@@ -300,7 +321,7 @@ List<Product> getList() {
       Product(
           image: "https://static.insales-cdn.com/r/F3wfrNacEz0/rs:fit:1920:1920:1/plain/images/products/1/4247/634097815/1.jpg@webp",
           name: "Ducky One 3 Mini Yellow",
-          price: "13 990 ₽",
+          price: 13990,
           description: "One 3 — новая глава в истории Ducky. Клавиатура порадует "
               "обновленным корпусом, возможностью менять переключатели без "
               "паяльника, пятью слоями для настройки, стоковой виброизоляцией "
@@ -311,7 +332,7 @@ List<Product> getList() {
       Product(
           image: "https://static.insales-cdn.com/r/_5pGENlbc8s/rs:fit:1920:1920:1/plain/images/products/1/7381/675232981/ducky-sf-mist-4.jpg@webp",
           name: "Ducky One 3 SF Mist",
-          price: "15 990 ₽",
+          price: 15990,
           description: "One 3 — новая глава в истории Ducky. Клавиатура порадует "
               "обновленным корпусом, возможностью менять переключатели без "
               "паяльника, пятью слоями для настройки, стоковой виброизоляцией и "
@@ -322,7 +343,7 @@ List<Product> getList() {
       Product(
           image: "https://static.insales-cdn.com/r/iSv5pXUWgYU/rs:fit:1920:1920:1/plain/images/products/1/6767/675232367/ducky-mini-front-min.jpg@webp",
           name: "Ducky One 3 Mini Cosmic",
-          price: "13 990 ₽",
+          price: 13990,
           description: "One 3 — новая глава в истории Ducky. Клавиатура порадует "
               "обновленным корпусом, возможностью менять переключатели без "
               "паяльника, пятью слоями для настройки, стоковой виброизоляцией "
@@ -333,7 +354,7 @@ List<Product> getList() {
       Product(
           image: "https://static.insales-cdn.com/r/pMzhTuEjeYY/rs:fit:1920:1920:1/plain/images/products/1/6223/675231823/ducky-mini-mist-3.jpg@webp",
           name: "Ducky One 3 Mini Mist",
-          price: "13 990 ₽",
+          price: 13990,
           description: "One 3 — новая глава в истории Ducky. Клавиатура порадует "
               "обновленным корпусом, возможностью менять переключатели без "
               "паяльника, пятью слоями для настройки, стоковой виброизоляцией и "
@@ -344,7 +365,7 @@ List<Product> getList() {
       Product(
           image: "https://static.insales-cdn.com/r/qIir7l_45ig/rs:fit:1920:1920:1/plain/images/products/1/6226/672077906/12.jpg@webp",
           name: "Varmilo Shurikey Saizo 002",
-          price: "15 990 ₽",
+          price: 15990,
           description: "Название Shurikey происходит от сочетания слова shuriken "
               "(сюрикэн), знаменитого оружия, со словом key (клавиша). Модель "
               "Saizo названа в честь Киригакурэ Сайзо, который входил в состав "
@@ -357,7 +378,7 @@ List<Product> getList() {
       Product(
           image: "https://static.insales-cdn.com/r/PfSSNLQ4RLc/rs:fit:1920:1920:1/plain/images/products/1/5181/505943101/1_SHURIKEY_HANZO_001.jpg@webp",
           name: "Varmilo Shurikey Hanzo 001",
-          price: "14 690 ₽",
+          price: 14690,
           description: "Название Shurikey происходит от сочетания слова shuriken "
               "(сюрикэн), знаменитого оружия ниндзя всех сортов, со словом key "
               "(клавиша). Модель Hanzo названа в честь самурая Хаттори Ханзо, "
@@ -370,7 +391,7 @@ List<Product> getList() {
       Product(
           image: "https://static.insales-cdn.com/r/FAFf2pX_TBU/rs:fit:1920:1920:1/plain/images/products/1/7470/506281262/1_SHURIKEY_HANZO_003.jpg@webp",
           name: "Varmilo Shurikey Hanzo 003",
-          price: "14 690 ₽",
+          price: 14690,
           description: "Название Shurikey происходит от сочетания слова shuriken "
               "(сюрикэн), знаменитого оружия ниндзя всех сортов, со словом key "
               "(клавиша). Модель Hanzo названа в честь самурая Хаттори Ханзо, "
@@ -388,7 +409,7 @@ List<Product> getList() {
       Product(
           image: "https://static.insales-cdn.com/r/fyLlZuL3RP0/rs:fit:1920:1920:1/plain/images/products/1/2218/515680426/1_.jpg@webp",
           name: "Mistel MD600 V3 RGB",
-          price: "17 480 ₽",
+          price: 17480,
           description: "Mistel — тайваньская компания, которая славится своими "
               "сплитами. Сплит — это эргономический форм-фактор, суть которого "
               "в разделении клавиатуры на две отдельные части. Такой подход "
@@ -402,7 +423,7 @@ List<Product> getList() {
       Product(
           image: "https://static.insales-cdn.com/r/eDgjc1e8LYY/rs:fit:1920:1920:1/plain/images/products/1/3101/467717149/1.jpg@webp",
           name: "Realforce R2 TenKeyless BlueGray APC",
-          price: "35 290 ₽",
+          price: 35290,
           description: "Сперва переключатели Topre производят впечатление "
               "улучшенных мембранных переключателей с резиновой прокладкой; "
               "затем начинает казаться, что вы работаете с механическими "
@@ -428,7 +449,7 @@ List<Product> getList() {
       Product(
           image: "https://static.insales-cdn.com/r/xYbiL4cGkJc/rs:fit:1920:1920:1/plain/images/products/1/3197/467717245/2.jpg@webp",
           name: "Realforce R2 TenKeyless Ivory",
-          price: "35 290 ₽",
+          price: 35290,
           description: "Сперва переключатели Topre производят впечатление "
               "улучшенных мембранных переключателей с резиновой прокладкой; "
               "затем начинает казаться, что вы работаете с механическими "
@@ -453,7 +474,7 @@ List<Product> getList() {
       Product(
           image: "https://static.insales-cdn.com/r/fWqCO1dcvQo/rs:fit:1920:1920:1/plain/images/products/1/2936/467716984/3.jpg@webp",
           name: "Realforce R2 TenKeyless Black",
-          price: "35 290 ₽",
+          price: 35290,
           description: "Realforce — японский бренд с историей. Все клавиатуры "
               "компании Realforce спроектированы и собраны на территории Японии. "
               "\nСперва переключатели Topre производят впечатление улучшенных "
