@@ -12,6 +12,7 @@ class Product {
   });
 }
 
+
 //этот метод преобразует цену типа Int в тип String нужного вида
 String getString(int price) {
   String str = price.toString();

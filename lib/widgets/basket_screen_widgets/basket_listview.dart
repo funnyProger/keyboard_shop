@@ -1,159 +1,123 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:keyboard_shop/models/basket.dart';
-import '../../models/product.dart';
+import 'package:keyboard_shop/models/basket_model.dart';
+import 'package:provider/provider.dart';
+import '../../model_objects/product.dart';
 
 //widget class
 class BasketWidget extends StatefulWidget {
   const BasketWidget({super.key});
+
   @override
-  ListState createState() => ListState();
+  State<BasketWidget> createState() => _ListState();
 }
 
 //state widget class
-class ListState extends State<BasketWidget> {
-
-  //map хранит слудующие пары (product, count), где count - количество
-  //данного товара, которое пользователь добавил в корзину
-
-  Map<Product, int> map = {};
-  List<Product> list = [];
-
-  /*
-  Это сделано для того, чтобы в корзине не отображались одни и те же товары
-  в списке. Вместе этого в корзине у каждого товара в есть счетчик, которые
-  указывает, какое количество данного товара пользователь добавил в корзину.
-  Если польователь захочет добавить товар еще, он может сделать это, нажав на
-  кнопку плюсика или в списке всех товаров, нажав на кнопку "В корзину".
-  После этого счетчик обновится и корзина отобразит соответствующие изменения.
-  Кнопка минуса уменьшает количество выбранного товара на единицу. Если счетчик
-  показывает 1, то при нажатии на кнопку минус товар удаляется из списка и
-  корзина отображает соответствующие изменения.
-   */
-
-  //basket price
-  String totalPrice() {
-    int basketPrice = 0;
-    map.forEach((key, value) {
-      basketPrice = basketPrice + (key.price * value);
-    });
-    //вызов метода getString() из класса Product для преобразования стоимости
-    //корзины в строку нужного вида
-    return getString(basketPrice);
-  }
+class _ListState extends State<BasketWidget> {
 
   @override
   Widget build(BuildContext context) {
-    map = Basket.getInstance().map;
-    list = Basket.getInstance().getKeys().toList();
-
-    String toBuy = "";
-    if(map.isEmpty) {
-      toBuy = "Корзина";
-    } else {
-      toBuy = "К оплате: ${totalPrice()}";
-    }
-
-    if(map.isEmpty) {
-      return
-        Scaffold(
-          body: Container(
+    return
+      Scaffold(
+        body: Container(
             color: Colors.black87,
             padding: const EdgeInsets.all(7),
-            child: const Center(
-              child: Text(
-                  "Корзина пуста",
-                  style: TextStyle(fontSize: 17, color: Colors.white54),
-                  textDirection: TextDirection.ltr
-              ),
-            )
-          ),
-          appBar: AppBar(
-            title: Text(
-              toBuy,
-              style: const TextStyle(fontSize: 20, color: Colors.white),
-              textDirection: TextDirection.ltr,
+            child: Consumer<BasketModel> (
+              builder: (context, basketModel, child) => selectWidget(context, basketModel, child),
             ),
-            backgroundColor: Colors.black,
-          ),
-        );
-    } else {
-      return Stack(
-        children: [
-          Scaffold(
-            body: Container(
-              color: Colors.black87,
-              padding: const EdgeInsets.all(7),
-              child: ListView.builder(
-                  itemCount: list.length + 1,
-                  itemBuilder: listViewBuilder
-              ),
-            ),
-            appBar: AppBar(
-              title: Text(
-                toBuy,
-                style: const TextStyle(fontSize: 20, color: Colors.white),
-                textDirection: TextDirection.ltr,
-              ),
-              backgroundColor: Colors.black,
-            ),
-          ),
-
-          Container(
-              alignment: Alignment.bottomCenter,
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    Basket.getInstance().buy();
-                    Fluttertoast.showToast(
-                      msg: "Успешно оплачено",
-                      toastLength: Toast.LENGTH_SHORT,
-                      backgroundColor: Colors.green,
-                      textColor: Colors.white,
-                      fontSize: 15,
-                    );
-                  });
-                },
-                child: Container(
-                  height: 50,
-                  width: 250,
-                  alignment: Alignment.center,
-                  margin: const EdgeInsets.only(top: 15, bottom: 15),
-                  decoration: BoxDecoration(
-                    color: Colors.green,
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  child: const Text(
-                    "Купить",
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white,
-                    ),
-                    textDirection: TextDirection.ltr,
-                  ),
+        ),
+        appBar: AppBar(
+          title: Consumer<BasketModel> (
+            builder: (context, basketModel, child) =>
+                Text(
+                  basketModel.basketPrice,
+                  style: const TextStyle(fontSize: 20, color: Colors.white),
+                  textDirection: TextDirection.ltr,
                 ),
-              )
-          )
-        ],
+          ),
+          backgroundColor: Colors.black,
+        ),
       );
+  }
+
+  Widget selectWidget(BuildContext context, BasketModel basketModel, Widget? child) {
+    if(child != null) {
+      return child;
+    } else if(BasketModel().getMap().isEmpty) {
+      return const Center(
+        child: Text(
+            "Корзина пуста",
+            style: TextStyle(fontSize: 17, color: Colors.white54),
+            textDirection: TextDirection.ltr
+        ),
+      );
+    } else {
+      return
+        Stack(
+          children: [
+            ListView.builder(
+                itemCount: basketModel.getKeysList().length + 1,
+                itemBuilder: (context, index) {
+                  return listViewBuilder(
+                      context,
+                      basketModel,
+                      index,
+                      basketModel.getKeysList() as List<Product>);
+                }),
+            Container(
+                alignment: Alignment.bottomCenter,
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      BasketModel().buy();
+                      Fluttertoast.showToast(
+                        msg: "Успешно оплачено",
+                        toastLength: Toast.LENGTH_SHORT,
+                        backgroundColor: Colors.green,
+                        textColor: Colors.white,
+                        fontSize: 15,
+                      );
+                    });
+                  },
+                  child: Container(
+                    height: 50,
+                    width: 250,
+                    alignment: Alignment.center,
+                    margin: const EdgeInsets.only(top: 15, bottom: 15),
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    child: const Text(
+                      "Купить",
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                      ),
+                      textDirection: TextDirection.ltr,
+                    ),
+                  ),
+                )
+            )
+          ],
+        );
     }
   }
 
   //listViewBuilder
-  Widget listViewBuilder(BuildContext context, int index) {
+  Widget listViewBuilder(BuildContext context, BasketModel basketModel, int index, List<Product> list) {
     if(index == list.length) {
       return Container(
         height: 75,
       );
     } else {
       return
-        listItem(index);
+        listItem(index, basketModel, list);
     }
-
   }
 
   //listViewItem
-  Widget listItem(int index) {
+  Widget listItem(int index, BasketModel basketModel, List<Product> list) {
     return
       Container(
           margin: const EdgeInsets.symmetric(vertical: 3),
@@ -210,9 +174,7 @@ class ListState extends State<BasketWidget> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                setState(() {
-                                  Basket.getInstance().addToBasket(list[index]);
-                                });
+                                context.read<BasketModel>().addToBasket(list[index]);
                               },
                               child: Container(
                                 margin: const EdgeInsets.all(3),
@@ -244,7 +206,7 @@ class ListState extends State<BasketWidget> {
                                   color: Colors.black12
                               ),
                               child: Text(
-                                map[list[index]].toString(),
+                                basketModel.getMap()[list[index]].toString(),
                                 style: const TextStyle(
                                   fontSize: 15,
                                   color: Colors.black,
@@ -254,9 +216,7 @@ class ListState extends State<BasketWidget> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                setState(() {
-                                  Basket.getInstance().removeFromBasket(list[index]);
-                                });
+                                context.read<BasketModel>().removeFromBasket(list[index]);
                               },
                               child: Container(
                                 margin: const EdgeInsets.all(3),

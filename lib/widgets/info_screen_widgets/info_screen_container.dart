@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:keyboard_shop/models/product.dart';
 import 'package:keyboard_shop/widgets/basket_screen_widgets/basket_listview.dart';
+import 'package:keyboard_shop/widgets/first_screen_widgets/first_screen_container.dart';
+import 'package:provider/provider.dart';
 
+import '../../model_objects/product.dart';
+import '../../models/basket_model.dart';
 import 'info.dart';
 
 class InfoScreenContainer extends StatelessWidget {
@@ -24,20 +27,18 @@ class InfoScreenContainer extends StatelessWidget {
         backgroundColor: Colors.black,
         actions: [
           GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const BasketWidget()
-                ),
-              );
-            },
-            child: Container(
-              height: 29,
-              width: 29,
-              margin: const EdgeInsets.only(right: 15),
-              child: Image.asset('assets/images/basket.png'),
-            ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const BasketWidget()
+                  ),
+                );
+              },
+              child: Consumer<BasketModel> (
+                builder: (context, basketModel, child) =>
+                    const FirstScreenContainer().getIcon(context, basketModel, child),
+              )
           ),
         ],
       ),

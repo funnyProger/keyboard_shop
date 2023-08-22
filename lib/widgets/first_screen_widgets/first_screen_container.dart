@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:keyboard_shop/models/basket_model.dart';
 import 'package:keyboard_shop/widgets/basket_screen_widgets/basket_listview.dart';
-import '../../models/product.dart';
+import 'package:provider/provider.dart';
+import '../../model_objects/product.dart';
 import 'product_listview.dart';
 
 class FirstScreenContainer extends StatelessWidget {
@@ -8,6 +11,7 @@ class FirstScreenContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("запустилась открисовка");
     return Scaffold(
       body: Container(
         color: Colors.black87,
@@ -31,15 +35,57 @@ class FirstScreenContainer extends StatelessWidget {
                   ),
               );
             },
-            child: Container(
-              height: 29,
-              width: 29,
-              margin: const EdgeInsets.only(right: 15),
-              child: Image.asset('assets/images/basket.png'),
-            ),
+            child: Consumer<BasketModel> (
+              builder: (context, basketModel, child) => getIcon(context, basketModel, child),
+            )
           ),
         ],
       ),
     );
+  }
+
+  Widget getIcon(BuildContext context, BasketModel basketModel, Widget? child) {
+    if(BasketModel().getMap().isEmpty) {
+      return
+        Container(
+          width: 29,
+          margin: const EdgeInsets.only(right: 15),
+          child: Image.asset('assets/images/basket.png'),
+        );
+    } else {
+      print("заработал метод нужный мне");
+      return
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            Container(
+              height: 29,
+              margin: const EdgeInsets.only(right: 15),
+              child: Image.asset('assets/images/basket.png'),
+            ),
+            Positioned(
+                left: 20,
+                top: 10,
+                child: Container(
+                  alignment: Alignment.center,
+                  width: 15,
+                  height: 15,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
+                    color: Colors.red,
+                  ),
+                  child: Text(
+                    basketModel.basketCount.toString(),
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: Colors.white
+                    ),
+                    textDirection: TextDirection.ltr,
+                  ),
+                )
+            )
+          ],
+        );
+    }
   }
 }
