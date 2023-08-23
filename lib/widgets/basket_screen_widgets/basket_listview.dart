@@ -69,7 +69,7 @@ class _ListState extends State<BasketWidget> {
                 child: GestureDetector(
                   onTap: () {
                     setState(() {
-                      BasketModel().buy();
+                      Provider.of<BasketModel>(context, listen: false).buy();
                       Fluttertoast.showToast(
                         msg: "Успешно оплачено",
                         toastLength: Toast.LENGTH_SHORT,
@@ -174,7 +174,7 @@ class _ListState extends State<BasketWidget> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                context.read<BasketModel>().addToBasket(list[index]);
+                                Provider.of<BasketModel>(context, listen: false).addToBasket(list[index]);
                               },
                               child: Container(
                                 margin: const EdgeInsets.all(3),
@@ -216,7 +216,7 @@ class _ListState extends State<BasketWidget> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                context.read<BasketModel>().removeFromBasket(list[index]);
+                                Provider.of<BasketModel>(context, listen: false).removeFromBasket(list[index]);
                               },
                               child: Container(
                                 margin: const EdgeInsets.all(3),

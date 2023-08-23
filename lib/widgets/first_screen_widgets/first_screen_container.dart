@@ -11,7 +11,6 @@ class FirstScreenContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("запустилась открисовка");
     return Scaffold(
       body: Container(
         color: Colors.black87,
@@ -53,7 +52,6 @@ class FirstScreenContainer extends StatelessWidget {
           child: Image.asset('assets/images/basket.png'),
         );
     } else {
-      print("заработал метод нужный мне");
       return
         Stack(
           alignment: Alignment.center,

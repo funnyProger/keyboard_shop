@@ -1,11 +1,11 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:keyboard_shop/model_objects/basket.dart';
 import '../model_objects/product.dart';
 
 class BasketModel extends ChangeNotifier {
 
-  late dynamic basketPrice = 'Корзина';
-  late int basketCount = 0;
+  dynamic basketPrice = 'Корзина';
+  int basketCount = 0;
 
   void addToBasket(Product product) {
     var basketMap = Basket.getInstance().getMap();
@@ -20,11 +20,10 @@ class BasketModel extends ChangeNotifier {
   }
 
   void removeFromBasket(Product product) {
-    var basketMap = Basket.getInstance().getMap();
-    if(basketMap[product] == 1) {
-      basketMap.remove(product);
+    if(getMap()[product] == 1) {
+      getMap().remove(product);
     } else {
-      basketMap.update(product, (value) => value - 1);
+      getMap().update(product, (value) => value - 1);
     }
     totalPrice();
     changeBasketCount();
@@ -32,15 +31,14 @@ class BasketModel extends ChangeNotifier {
   }
 
   void buy() {
-    var basketMap = Basket.getInstance().getMap();
-    basketMap.clear();
+    getMap().clear();
+    basketPrice = 'Корзина';
     changeBasketCount();
     notifyListeners();
   }
 
   Iterable<Product> getKeysList() {
-    var basketMap = Basket.getInstance().getMap();
-    return basketMap.keys.toList();
+    return getMap().keys.toList();
   }
 
   Map<Product, int> getMap() {

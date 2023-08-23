@@ -98,7 +98,7 @@ class _ListState extends State<ListWidget> {
                 flex: 6,
                 child: GestureDetector(
                     onTap: () {
-                      context.read<BasketModel>().addToBasket(product);
+                      Provider.of<BasketModel>(context, listen: false).addToBasket(product);
                       Fluttertoast.showToast(
                         msg: "Успешно добавлено",
                         toastLength: Toast.LENGTH_SHORT,
