@@ -44,7 +44,7 @@ class FirstScreenContainer extends StatelessWidget {
   }
 
   Widget getIcon(BuildContext context, BasketModel basketModel, Widget? child) {
-    if(BasketModel().getMap().isEmpty) {
+    if(basketModel.getMap().isEmpty) {
       return
         Container(
           width: 29,

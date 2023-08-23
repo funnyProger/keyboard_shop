@@ -43,7 +43,7 @@ class _ListState extends State<BasketWidget> {
   Widget selectWidget(BuildContext context, BasketModel basketModel, Widget? child) {
     if(child != null) {
       return child;
-    } else if(BasketModel().getMap().isEmpty) {
+    } else if(basketModel.getMap().isEmpty) {
       return const Center(
         child: Text(
             "Корзина пуста",
