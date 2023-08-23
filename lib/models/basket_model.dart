@@ -4,8 +4,8 @@ import '../model_objects/product.dart';
 
 class BasketModel extends ChangeNotifier {
 
-  dynamic basketPrice = 'Корзина';
-  int basketCount = 0;
+  dynamic _basketPrice = 'Корзина';
+  int _basketCount = 0;
 
   void addToBasket(Product product) {
     var basketMap = Basket.getInstance().getMap();
@@ -32,7 +32,7 @@ class BasketModel extends ChangeNotifier {
 
   void buy() {
     getMap().clear();
-    basketPrice = 'Корзина';
+    _basketPrice = 'Корзина';
     changeBasketCount();
     notifyListeners();
   }
@@ -47,24 +47,32 @@ class BasketModel extends ChangeNotifier {
 
   void totalPrice() {
     if(getMap().isEmpty) {
-      basketPrice = "Корзина";
+      _basketPrice = "Корзина";
     } else {
-      basketPrice = 0;
+      _basketPrice = 0;
       getMap().forEach((key, value) {
-        basketPrice = basketPrice + (key.price * value);
+        _basketPrice = _basketPrice + (key.price * value);
       });
       //вызов метода getString() из класса Product для преобразования стоимости
       //корзины в строку нужного вида
-      basketPrice = "К оплате: ${getString(basketPrice)}";
+      _basketPrice = "К оплате: ${getString(_basketPrice)}";
     }
     notifyListeners();
   }
 
   void changeBasketCount() {
-    basketCount = 0;
+    _basketCount = 0;
     getMap().forEach((key, value) {
-      basketCount = basketCount + value;
+      _basketCount = _basketCount + value;
     });
     notifyListeners();
+  }
+
+  String getBasketPrice() {
+    return _basketPrice;
+  }
+
+  int getBasketCount() {
+    return _basketCount;
   }
 }

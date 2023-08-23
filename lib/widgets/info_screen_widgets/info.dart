@@ -132,5 +132,4 @@ class InfoWidget extends StatelessWidget {
 
   }
 
-
 }

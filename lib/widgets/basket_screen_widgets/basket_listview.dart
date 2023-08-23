@@ -30,7 +30,7 @@ class _ListState extends State<BasketWidget> {
           title: Consumer<BasketModel> (
             builder: (context, basketModel, child) =>
                 Text(
-                  basketModel.basketPrice,
+                  basketModel.getBasketPrice(),
                   style: const TextStyle(fontSize: 20, color: Colors.white),
                   textDirection: TextDirection.ltr,
                 ),

@@ -73,7 +73,7 @@ class FirstScreenContainer extends StatelessWidget {
                     color: Colors.red,
                   ),
                   child: Text(
-                    basketModel.basketCount.toString(),
+                    basketModel.getBasketCount().toString(),
                     style: const TextStyle(
                       fontSize: 11,
                       color: Colors.white
