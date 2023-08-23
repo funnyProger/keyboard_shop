@@ -15,4 +15,6 @@ class Basket {
   Map<Product, int> getMap() {
     return _instance._map;
   }
+
+
 }

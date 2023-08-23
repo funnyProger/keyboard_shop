@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:keyboard_shop/model_objects/basket.dart';
 import '../model_objects/product.dart';
 
-class BasketModel extends ChangeNotifier {
+class BasketModel extends ChangeNotifier{
 
   dynamic _basketPrice = 'Корзина';
   int _basketCount = 0;
@@ -75,4 +75,5 @@ class BasketModel extends ChangeNotifier {
   int getBasketCount() {
     return _basketCount;
   }
+
 }

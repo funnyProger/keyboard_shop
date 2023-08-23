@@ -4,16 +4,9 @@ import 'package:keyboard_shop/models/basket_model.dart';
 import 'package:provider/provider.dart';
 import '../../model_objects/product.dart';
 
-//widget class
-class BasketWidget extends StatefulWidget {
+class BasketWidget extends StatelessWidget {
   const BasketWidget({super.key});
 
-  @override
-  State<BasketWidget> createState() => _ListState();
-}
-
-//state widget class
-class _ListState extends State<BasketWidget> {
 
   @override
   Widget build(BuildContext context) {
@@ -68,16 +61,14 @@ class _ListState extends State<BasketWidget> {
                 alignment: Alignment.bottomCenter,
                 child: GestureDetector(
                   onTap: () {
-                    setState(() {
-                      Provider.of<BasketModel>(context, listen: false).buy();
-                      Fluttertoast.showToast(
-                        msg: "Успешно оплачено",
-                        toastLength: Toast.LENGTH_SHORT,
-                        backgroundColor: Colors.green,
-                        textColor: Colors.white,
-                        fontSize: 15,
-                      );
-                    });
+                    context.read<BasketModel>().buy();
+                    Fluttertoast.showToast(
+                      msg: "Успешно оплачено",
+                      toastLength: Toast.LENGTH_SHORT,
+                      backgroundColor: Colors.green,
+                      textColor: Colors.white,
+                      fontSize: 15,
+                    );
                   },
                   child: Container(
                     height: 50,
@@ -112,12 +103,12 @@ class _ListState extends State<BasketWidget> {
       );
     } else {
       return
-        listItem(index, basketModel, list);
+        listItem(context, index, basketModel, list);
     }
   }
 
   //listViewItem
-  Widget listItem(int index, BasketModel basketModel, List<Product> list) {
+  Widget listItem(BuildContext context, int index, BasketModel basketModel, List<Product> list) {
     return
       Container(
           margin: const EdgeInsets.symmetric(vertical: 3),
@@ -174,7 +165,7 @@ class _ListState extends State<BasketWidget> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                Provider.of<BasketModel>(context, listen: false).addToBasket(list[index]);
+                                context.read<BasketModel>().addToBasket(list[index]);
                               },
                               child: Container(
                                 margin: const EdgeInsets.all(3),
@@ -216,7 +207,7 @@ class _ListState extends State<BasketWidget> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Provider.of<BasketModel>(context, listen: false).removeFromBasket(list[index]);
+                                context.read<BasketModel>().removeFromBasket(list[index]);
                               },
                               child: Container(
                                 margin: const EdgeInsets.all(3),

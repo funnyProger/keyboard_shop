@@ -3,22 +3,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:keyboard_shop/models/basket_model.dart';
 import 'package:keyboard_shop/widgets/info_screen_widgets/info_screen_container.dart';
 import 'package:provider/provider.dart';
-import '../../model_objects/basket.dart';
 import '../../model_objects/product.dart';
 
-class ListWidget  extends StatefulWidget {
+class ListWidget extends StatelessWidget {
   final List<Product> list;
 
   const ListWidget({super.key, required this.list});
-
-  @override
-  State<ListWidget> createState() => _ListState(list: list);
-}
-
-class _ListState extends State<ListWidget> {
-  final List<Product> list;
-
-  _ListState({required this.list});
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +88,7 @@ class _ListState extends State<ListWidget> {
                 flex: 6,
                 child: GestureDetector(
                     onTap: () {
-                      Provider.of<BasketModel>(context, listen: false).addToBasket(product);
+                      context.read<BasketModel>().addToBasket(product);
                       Fluttertoast.showToast(
                         msg: "Успешно добавлено",
                         toastLength: Toast.LENGTH_SHORT,

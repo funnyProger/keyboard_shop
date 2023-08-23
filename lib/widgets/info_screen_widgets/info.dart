@@ -91,7 +91,7 @@ class InfoWidget extends StatelessWidget {
                     alignment: Alignment.bottomCenter,
                     child: GestureDetector(
                       onTap: () {
-                        Provider.of<BasketModel>(context, listen: false).addToBasket(product);
+                        context.read<BasketModel>().addToBasket(product);
                         Fluttertoast.showToast(
                           msg: "Успешно добавлено",
                           toastLength: Toast.LENGTH_SHORT,
