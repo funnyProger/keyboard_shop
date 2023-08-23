@@ -34,17 +34,15 @@ class FirstScreenContainer extends StatelessWidget {
                   ),
               );
             },
-            child: Consumer<BasketModel> (
-              builder: (context, basketModel, child) => getIcon(context, basketModel, child),
-            )
+            child: getIcon(context.watch<BasketModel>()),
           ),
         ],
       ),
     );
   }
 
-  Widget getIcon(BuildContext context, BasketModel basketModel, Widget? child) {
-    if(basketModel.getMap().isEmpty) {
+  Widget getIcon(BasketModel modelContext) {
+    if(modelContext.getMap().isEmpty) {
       return
         Container(
           width: 29,
@@ -73,7 +71,7 @@ class FirstScreenContainer extends StatelessWidget {
                     color: Colors.red,
                   ),
                   child: Text(
-                    basketModel.getBasketCount().toString(),
+                    modelContext.getBasketCount().toString(),
                     style: const TextStyle(
                       fontSize: 11,
                       color: Colors.white

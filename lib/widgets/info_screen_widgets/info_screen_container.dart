@@ -37,7 +37,7 @@ class InfoScreenContainer extends StatelessWidget {
               },
               child: Consumer<BasketModel> (
                 builder: (context, basketModel, child) =>
-                    const FirstScreenContainer().getIcon(context, basketModel, child),
+                    const FirstScreenContainer().getIcon(context.watch<BasketModel>()),
               )
           ),
         ],
