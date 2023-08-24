@@ -5,16 +5,19 @@ class Basket {
   Basket._();
   static final Basket _instance = Basket._();
 
-  final Map<Product, int> _map = {};
+  final Map<int, int> _countMap = {};
+  final Map<int, Product> _productMap = {};
 
   static Basket getInstance() {
     return _instance;
   }
 
-  //возвразает map корзины
-  Map<Product, int> getMap() {
-    return _instance._map;
+  Map<int, int> getCountMap() {
+    return _instance._countMap;
   }
 
+  Map<int, Product> getProductMap() {
+    return _instance._productMap;
+  }
 
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:keyboard_shop/widgets/basket_screen_widgets/basket_listview.dart';
+import 'package:keyboard_shop/widgets/first_screen_widgets/basket_icon_widget.dart';
 import 'package:keyboard_shop/widgets/first_screen_widgets/first_screen_container.dart';
 import 'package:provider/provider.dart';
 
@@ -37,7 +38,7 @@ class InfoScreenContainer extends StatelessWidget {
               },
               child: Consumer<BasketModel> (
                 builder: (context, basketModel, child) =>
-                    const FirstScreenContainer().getIcon(context.watch<BasketModel>()),
+                    const BasketIconWidget(),
               )
           ),
         ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:keyboard_shop/models/basket_model.dart';
 import 'package:keyboard_shop/widgets/basket_screen_widgets/basket_listview.dart';
+import 'package:keyboard_shop/widgets/first_screen_widgets/basket_icon_widget.dart';
 import 'package:provider/provider.dart';
 import '../../model_objects/product.dart';
 import 'product_listview.dart';
@@ -15,7 +16,7 @@ class FirstScreenContainer extends StatelessWidget {
       body: Container(
         color: Colors.black87,
         padding: const EdgeInsets.all(7),
-        child: ListWidget(list: getList()),
+        child: ListWidget(list: getList(NewID())),
       ),
       appBar: AppBar(
         title: const Text(
@@ -34,54 +35,10 @@ class FirstScreenContainer extends StatelessWidget {
                   ),
               );
             },
-            child: getIcon(context.watch<BasketModel>()),
+            child: const BasketIconWidget(),
           ),
         ],
       ),
     );
-  }
-
-  Widget getIcon(BasketModel modelContext) {
-    if(modelContext.getMap().isEmpty) {
-      return
-        Container(
-          width: 29,
-          margin: const EdgeInsets.only(right: 15),
-          child: Image.asset('assets/images/basket.png'),
-        );
-    } else {
-      return
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            Container(
-              height: 29,
-              margin: const EdgeInsets.only(right: 15),
-              child: Image.asset('assets/images/basket.png'),
-            ),
-            Positioned(
-                left: 20,
-                top: 10,
-                child: Container(
-                  alignment: Alignment.center,
-                  width: 15,
-                  height: 15,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100),
-                    color: Colors.red,
-                  ),
-                  child: Text(
-                    modelContext.getBasketCount().toString(),
-                    style: const TextStyle(
-                      fontSize: 11,
-                      color: Colors.white
-                    ),
-                    textDirection: TextDirection.ltr,
-                  ),
-                )
-            )
-          ],
-        );
-    }
   }
 }
