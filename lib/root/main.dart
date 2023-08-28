@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:keyboard_shop/models/basket_model.dart';
-import '../widgets/first_screen_widgets/first_screen_container.dart';
+import '../CORE/models/basket_model.dart';
+import '../GIU/widgets/first_screen_widgets/first_screen_container.dart';
 
 void main() {
   runApp(

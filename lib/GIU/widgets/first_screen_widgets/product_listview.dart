@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:keyboard_shop/models/basket_model.dart';
-import 'package:keyboard_shop/widgets/info_screen_widgets/info_screen_container.dart';
 import 'package:provider/provider.dart';
-import '../../model_objects/product.dart';
+import '../../../CORE/model_objects/product.dart';
+import '../../../CORE/models/basket_model.dart';
+import '../info_screen_widgets/info_screen_container.dart';
 
 class ListWidget extends StatelessWidget {
   final List<Product> list;

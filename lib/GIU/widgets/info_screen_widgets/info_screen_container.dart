@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:keyboard_shop/widgets/basket_screen_widgets/basket_listview.dart';
-import 'package:keyboard_shop/widgets/first_screen_widgets/basket_icon_widget.dart';
-import 'package:keyboard_shop/widgets/first_screen_widgets/first_screen_container.dart';
-import 'package:provider/provider.dart';
-
-import '../../model_objects/product.dart';
-import '../../models/basket_model.dart';
+import 'package:keyboard_shop/GIU/widgets/first_screen_widgets/basket_icon_widget.dart';
+import '../../../CORE/model_objects/product.dart';
+import '../basket_screen_widgets/basket_listview.dart';
 import 'info.dart';
 
 class InfoScreenContainer extends StatelessWidget {
@@ -36,10 +32,7 @@ class InfoScreenContainer extends StatelessWidget {
                   ),
                 );
               },
-              child: Consumer<BasketModel> (
-                builder: (context, basketModel, child) =>
-                    const BasketIconWidget(),
-              )
+              child: const BasketIconWidget()
           ),
         ],
       ),

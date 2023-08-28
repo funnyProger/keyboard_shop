@@ -1,6 +1,6 @@
-//синглтон класс
-import 'package:keyboard_shop/model_objects/product.dart';
+import 'package:keyboard_shop/CORE/model_objects/product.dart';
 
+//синглтон класс
 class Basket {
   Basket._();
   static final Basket _instance = Basket._();

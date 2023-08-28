@@ -1,10 +1,10 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:keyboard_shop/model_objects/basket.dart';
+import '../model_objects/basket.dart';
 import '../model_objects/product.dart';
 
-class BasketModel extends ChangeNotifier{
+class BasketModel extends ChangeNotifier {
 
   String _basketPrice = 'Корзина';
 
@@ -71,6 +71,7 @@ class BasketModel extends ChangeNotifier{
       });
       //вызов метода getString() из класса Product для преобразования стоимости
       //корзины в строку нужного вида
+
       _basketPrice = "К оплате: ${getString(tmp)}";
     }
   }

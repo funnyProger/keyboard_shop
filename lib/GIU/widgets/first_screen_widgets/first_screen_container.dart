@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:keyboard_shop/models/basket_model.dart';
-import 'package:keyboard_shop/widgets/basket_screen_widgets/basket_listview.dart';
-import 'package:keyboard_shop/widgets/first_screen_widgets/basket_icon_widget.dart';
-import 'package:provider/provider.dart';
-import '../../model_objects/product.dart';
+import '../../../CORE/model_objects/product.dart';
+import '../basket_screen_widgets/basket_listview.dart';
+import 'basket_icon_widget.dart';
 import 'product_listview.dart';
 
 class FirstScreenContainer extends StatelessWidget {
