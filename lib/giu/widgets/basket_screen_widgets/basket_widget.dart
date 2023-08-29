@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:keyboard_shop/core/model_objects/basket_objects/basket_product.dart';
+import 'package:keyboard_shop/core/models/basket_model.dart';
 import 'package:provider/provider.dart';
-import '../../../CORE/model_objects/product.dart';
-import '../../../CORE/models/basket_model.dart';
+
 
 
 class BasketWidget extends StatelessWidget {
   const BasketWidget({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,7 @@ class BasketWidget extends StatelessWidget {
   }
 
   Widget selectWidget(BuildContext context) {
-    if(context.read<BasketModel>().getProductMap().isEmpty) {
+    if(context.read<BasketModel>().basketIsEmpty()) {
       return const Center(
         child: Text(
             "Корзина пуста",
@@ -38,7 +40,7 @@ class BasketWidget extends StatelessWidget {
         ),
       );
     } else {
-      var list = context.read<BasketModel>().getProductList();
+      var list = context.read<BasketModel>().getBasketList();
       return
         Stack(
           children: [
@@ -90,7 +92,7 @@ class BasketWidget extends StatelessWidget {
   }
 
   //listViewBuilder
-  Widget listViewBuilder(BuildContext context, int index, List<Product> list) {
+  Widget listViewBuilder(BuildContext context, int index, List<BasketProduct> list) {
     if(index == list.length) {
       return Container(
         height: 75,
@@ -102,7 +104,7 @@ class BasketWidget extends StatelessWidget {
   }
 
   //listViewItem
-  Widget listItem(BuildContext context, int index, List<Product> list) {
+  Widget listItem(BuildContext context, int index, List<BasketProduct> list) {
     return
       Container(
           margin: const EdgeInsets.symmetric(vertical: 3),
@@ -117,7 +119,7 @@ class BasketWidget extends StatelessWidget {
                   child: Container(
                     height: 90,
                     padding: const EdgeInsets.all(5),
-                    child: Image.network(list[index].image),
+                    child: Image.network(list[index].product.image),
                   )
               ),
               Expanded(
@@ -125,7 +127,7 @@ class BasketWidget extends StatelessWidget {
                   child: Container(
                       padding: const EdgeInsets.all(5),
                       child: Text(
-                        list[index].name,
+                        list[index].product.name,
                         style: const TextStyle(
                           fontSize: 15,
                           color: Colors.black,
@@ -144,7 +146,7 @@ class BasketWidget extends StatelessWidget {
                         child: Container(
                           padding: const EdgeInsets.all(5),
                           child: Text(
-                            getString(list[index].price),
+                            getString(list[index].product.price),
                             style: const TextStyle(
                               fontSize: 15,
                               color: Colors.black,
@@ -159,7 +161,7 @@ class BasketWidget extends StatelessWidget {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                context.read<BasketModel>().addToBasket(list[index]);
+                                context.read<BasketModel>().addToBasket(list[index].product.id, list[index].product);
                               },
                               child: Container(
                                 margin: const EdgeInsets.all(3),
@@ -191,7 +193,7 @@ class BasketWidget extends StatelessWidget {
                                   color: Colors.black12
                               ),
                               child: Text(
-                                context.read<BasketModel>().getCountMap()[list[index].id].toString(),
+                                list[index].count.toString(),
                                 style: const TextStyle(
                                   fontSize: 15,
                                   color: Colors.black,
@@ -201,7 +203,7 @@ class BasketWidget extends StatelessWidget {
                             ),
                             GestureDetector(
                               onTap: () {
-                                context.read<BasketModel>().removeFromBasket(list[index]);
+                                context.read<BasketModel>().removeFromBasket(list[index].product.id, list[index].product);
                               },
                               child: Container(
                                 margin: const EdgeInsets.all(3),

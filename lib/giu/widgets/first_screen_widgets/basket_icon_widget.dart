@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:keyboard_shop/core/models/basket_model.dart';
 import 'package:provider/provider.dart';
-
-import '../../../CORE/models/basket_model.dart';
 
 class BasketIconWidget extends StatelessWidget {
   const BasketIconWidget({super.key});
@@ -9,7 +8,7 @@ class BasketIconWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var modelContext = context.watch<BasketModel>();
-    if(modelContext.getProductMap().isEmpty) {
+    if(modelContext.basketIsEmpty()) {
       return
         Container(
           width: 29,

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:keyboard_shop/core/model_objects/json_data/product.dart';
+import 'package:keyboard_shop/core/models/basket_model.dart';
 import 'package:provider/provider.dart';
 
-import '../../../CORE/model_objects/product.dart';
-import '../../../CORE/models/basket_model.dart';
 
 class InfoWidget extends StatelessWidget {
   final Product product;
@@ -92,7 +92,7 @@ class InfoWidget extends StatelessWidget {
                     alignment: Alignment.bottomCenter,
                     child: GestureDetector(
                       onTap: () {
-                        context.read<BasketModel>().addToBasket(product);
+                        context.read<BasketModel>().addToBasket(product.id, product);
                         Fluttertoast.showToast(
                           msg: "Успешно добавлено",
                           toastLength: Toast.LENGTH_SHORT,

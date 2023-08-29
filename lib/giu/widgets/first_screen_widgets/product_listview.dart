@@ -1,24 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:keyboard_shop/core/model_objects/json_data/product_list.dart';
+import 'package:keyboard_shop/core/models/basket_model.dart';
 import 'package:provider/provider.dart';
-import '../../../CORE/model_objects/product.dart';
-import '../../../CORE/models/basket_model.dart';
+import '../../../core/model_objects/json_data/product.dart';
 import '../info_screen_widgets/info_screen_container.dart';
+import 'package:keyboard_shop/core/json_controller/json_controller.dart';
 
-class ListWidget extends StatelessWidget {
-  final List<Product> list;
+class ListWidget extends StatefulWidget {
+  const ListWidget({super.key});
 
-  const ListWidget({super.key, required this.list});
+  @override
+  State<ListWidget> createState() => _ListWidgetState();
+}
+
+class _ListWidgetState extends State<ListWidget> {
+  late Future<ProductList> productList;
+  late final List<Product> list;
+
+  @override
+  void initState() {
+    super.initState();
+    productList = Controller().fetchProductList();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 0.8,
-        ),
-        itemBuilder: itemBuilder,
-        itemCount: list.length,
+    return FutureBuilder<ProductList>(
+        future: productList,
+        builder: (context, snapshot) {
+          if(snapshot.hasData) {
+            list = snapshot.data as List<Product>;
+            return GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 0.8,
+              ),
+              itemBuilder: itemBuilder,
+              itemCount: list.length,
+            );
+          } else if(snapshot.hasError) {
+            return const Center(
+              child: Text(
+                "Ошибка загрузки",
+                style: TextStyle(fontSize: 20, color: Colors.white),
+                textDirection: TextDirection.ltr,
+              ),
+            );
+          }
+          return const CircularProgressIndicator();
+        },
+
     );
   }
 
@@ -88,7 +120,7 @@ class ListWidget extends StatelessWidget {
                 flex: 6,
                 child: GestureDetector(
                     onTap: () {
-                      context.read<BasketModel>().addToBasket(product);
+                      context.read<BasketModel>().addToBasket(product.id, product);
                       Fluttertoast.showToast(
                         msg: "Успешно добавлено",
                         toastLength: Toast.LENGTH_SHORT,
