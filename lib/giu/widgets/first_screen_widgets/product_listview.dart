@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:keyboard_shop/core/model_objects/json_data/product_list.dart';
 import 'package:keyboard_shop/core/models/basket_model.dart';
 import 'package:provider/provider.dart';
-import '../../../core/model_objects/json_data/product.dart';
+import 'package:keyboard_shop/core/model_objects/product_objects/product.dart';
 import '../info_screen_widgets/info_screen_container.dart';
 import 'package:keyboard_shop/core/json_controller/json_controller.dart';
 
@@ -15,18 +14,18 @@ class ListWidget extends StatefulWidget {
 }
 
 class _ListWidgetState extends State<ListWidget> {
-  late Future<ProductList> productList;
-  late final List<Product> list;
+  late Future<List<Product>> productList;
+  late List<Product> list;
 
   @override
   void initState() {
     super.initState();
-    productList = Controller().fetchProductList();
+    productList = Controller().readJsonData();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<ProductList>(
+    return FutureBuilder(
         future: productList,
         builder: (context, snapshot) {
           if(snapshot.hasData) {
@@ -48,7 +47,9 @@ class _ListWidgetState extends State<ListWidget> {
               ),
             );
           }
-          return const CircularProgressIndicator();
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
         },
 
     );

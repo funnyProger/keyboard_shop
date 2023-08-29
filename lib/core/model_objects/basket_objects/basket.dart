@@ -1,5 +1,5 @@
 import 'package:keyboard_shop/core/model_objects/basket_objects/basket_product.dart';
-import 'package:keyboard_shop/core/model_objects/json_data/product.dart';
+import 'package:keyboard_shop/core/model_objects/product_objects/product.dart';
 import 'package:keyboard_shop/core/models/basket_model.dart';
 
 //синглтон класс

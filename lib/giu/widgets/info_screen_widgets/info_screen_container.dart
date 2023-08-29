@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:keyboard_shop/GIU/widgets/first_screen_widgets/basket_icon_widget.dart';
-import 'package:keyboard_shop/core/model_objects/json_data/product.dart';
+import 'package:keyboard_shop/core/model_objects/product_objects/product.dart';
 import '../basket_screen_widgets/basket_widget.dart';
 import 'info.dart';
 

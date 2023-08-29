@@ -1,21 +1,19 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
-import 'package:keyboard_shop/core/model_objects/json_data/product_list.dart';
+import 'package:flutter/services.dart';
+import '../model_objects/product_objects/product.dart';
 
 class Controller {
   
-  Future<ProductList> fetchProductList() async {
-    File jsonFile = File('product.txt');
+  Future<List<Product>> readJsonData() async {
     try {
-      String content = await jsonFile.readAsString();
-      print(content);
-      return ProductList.fromJson(jsonDecode(content));
+      final fileContent = await rootBundle.loadString('assets/product.json');
+      final jsonData = json.decode(fileContent) as List<dynamic>;
+      return  jsonData.map((element) => Product.fromJson(element)).toList();
     } catch(e) {
       print(e);
       rethrow;
     }
   }
-
 
 }

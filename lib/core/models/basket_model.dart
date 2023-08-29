@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:keyboard_shop/core/model_objects/basket_objects/basket.dart';
 import 'package:keyboard_shop/core/model_objects/basket_objects/basket_product.dart';
-import 'package:keyboard_shop/core/model_objects/json_data/product.dart';
+import 'package:keyboard_shop/core/model_objects/product_objects/product.dart';
 
 class BasketModel extends ChangeNotifier {
   final Basket _basket = Basket.getInstance();
