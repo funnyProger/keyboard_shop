@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:keyboard_shop/core/controllers/data_controller.dart';
 import 'package:keyboard_shop/core/models/basket_model.dart';
 import 'package:provider/provider.dart';
 import 'package:keyboard_shop/core/model_objects/product_objects/product.dart';
 import '../info_screen_widgets/info_screen_container.dart';
-import 'package:keyboard_shop/core/json_controller/json_controller.dart';
 
 class ListWidget extends StatefulWidget {
   const ListWidget({super.key});
@@ -15,12 +15,12 @@ class ListWidget extends StatefulWidget {
 
 class _ListWidgetState extends State<ListWidget> {
   late Future<List<Product>> productList;
-  late List<Product> list;
+  Controller controller = Controller();
 
   @override
   void initState() {
     super.initState();
-    productList = Controller().readJsonData();
+    productList = controller.getProductData();
   }
 
   @override
@@ -29,14 +29,15 @@ class _ListWidgetState extends State<ListWidget> {
         future: productList,
         builder: (context, snapshot) {
           if(snapshot.hasData) {
-            list = snapshot.data as List<Product>;
             return GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 childAspectRatio: 0.8,
               ),
-              itemBuilder: itemBuilder,
-              itemCount: list.length,
+              itemBuilder: (context, index) {
+                return itemBuilder(context, snapshot.data![index]);
+              },
+              itemCount: snapshot.data?.length,
             );
           } else if(snapshot.hasError) {
             return const Center(
@@ -55,9 +56,7 @@ class _ListWidgetState extends State<ListWidget> {
     );
   }
 
-  Widget itemBuilder(BuildContext context, int index) {
-    final product = list[index];
-
+  Widget itemBuilder(BuildContext context, Product product) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -121,7 +120,7 @@ class _ListWidgetState extends State<ListWidget> {
                 flex: 6,
                 child: GestureDetector(
                     onTap: () {
-                      context.read<BasketModel>().addToBasket(product.id, product);
+                      context.read<BasketModel>().addToBasket(product);
                       Fluttertoast.showToast(
                         msg: "Успешно добавлено",
                         toastLength: Toast.LENGTH_SHORT,

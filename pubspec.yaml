@@ -39,6 +39,8 @@ dependencies:
   provider: ^6.0.5
   collection: ^1.17.1
   json_annotation: ^4.8.1
+  sqflite: ^2.3.0
+  path: ^1.8.3
 
 dev_dependencies:
   flutter_test:

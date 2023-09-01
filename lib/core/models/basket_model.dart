@@ -1,19 +1,23 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:keyboard_shop/core/controllers/data_controller.dart';
 import 'package:keyboard_shop/core/model_objects/basket_objects/basket.dart';
-import 'package:keyboard_shop/core/model_objects/basket_objects/basket_product.dart';
 import 'package:keyboard_shop/core/model_objects/product_objects/product.dart';
 
 class BasketModel extends ChangeNotifier {
   final Basket _basket = Basket.getInstance();
 
-  void addToBasket(int id, Product product) {
-    _basket.add(id, product);
+  void initBasketFromDB() {
+    Basket.initList();
+  }
+
+  void addToBasket(Product product) {
+    _basket.add(product);
     notifyListeners();
   }
 
-  void removeFromBasket(int id, Product product) {
-    _basket.remove(id, product);
+  void removeFromBasket(Product product) {
+    _basket.remove(product);
     notifyListeners();
   }
 
@@ -26,11 +30,11 @@ class BasketModel extends ChangeNotifier {
     return _basket.getPrice();
   }
 
-  int getBasketCount() {
-    return _basket.getCount();
+  Future<int> getBasketCount() async {
+    return Controller().getBasketDBCount();
   }
 
-  List<BasketProduct> getBasketList() {
+  List<Product> getBasketList() {
     return _basket.getProductList();
   }
 

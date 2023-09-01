@@ -1,78 +1,100 @@
-import 'package:keyboard_shop/core/model_objects/basket_objects/basket_product.dart';
+import 'package:flutter/foundation.dart';
 import 'package:keyboard_shop/core/model_objects/product_objects/product.dart';
 import 'package:keyboard_shop/core/models/basket_model.dart';
+import '../../controllers/data_controller.dart';
 
 //синглтон класс
 class Basket {
   Basket._();
   static final Basket _instance = Basket._();
+  static Controller controller = Controller();
 
-  final Map<int, BasketProduct> _productMap = {};
+  static List<Product> _productList = [];
+
+
+  static initList() async {
+    try {
+      _productList = await controller.getBasketData();
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
 
   static Basket getInstance() {
     return _instance;
   }
 
   //добавляет товар в корзину
-  void add(int id, Product product) {
-    if (_productMap.keys.contains(id)) {
-      _productMap[id]?.count++;
+  void add(Product product) {
+    if (_productList.isNotEmpty) {
+      bool trueOrFalse = true;
+      for (int i = 0; i < _productList.length; i++) {
+        if (product.id == _productList[i].id) {
+          _productList[i].count++;
+          controller.updateBasketData(_productList[i]);
+          trueOrFalse = false;
+          return;
+        }
+      }
+      if(trueOrFalse) {
+        _productList.add(product);
+        controller.addBasketData(product);
+      }
     } else {
-      _productMap[id] = BasketProduct(product: product);
+      _productList.add(product);
+      controller.addBasketData(product);
     }
-    getPrice();
+    initList();
   }
 
-  //удадяет товар из корзины
-  void remove(int id, Product product) {
-    if(_productMap[id]?.count == 1) {
-      _productMap.remove(id);
-    } else {
-      _productMap[id]?.count--;
+  //удаляет товар из корзины
+  void remove(Product product) {
+    for(int i = 0; i < _productList.length; i++) {
+      if(_productList[i] == product) {
+        if(_productList[i].count == 1) {
+          _productList.removeAt(i);
+          controller.deleteBasketData(product.id);
+          return;
+        } else {
+          _productList[i].count--;
+          controller.updateBasketData(_productList[i]);
+        }
+        getPrice();
+        return;
+      }
     }
-    getPrice();
+    initList();
   }
 
   //очищает корзину
   void buy() {
-    _productMap.clear();
+    _productList.clear();
+    controller.deleteAllBasketData();
   }
 
   //возвращает общую стоимость козины
   String getPrice() {
     int tmp = 0;
-    if(_productMap.isEmpty) {
+    if (_productList.isEmpty) {
       return "Корзина";
     } else {
-      _productMap.forEach((key, value) {
-      tmp = tmp + (value.count * value.product.price);
-    });
-      return "К оплате: ${getString(tmp)}";
+      for (int i = 0; i < _productList.length; i++) {
+        tmp = tmp + (_productList[i].price * _productList[i].count);
+      }
     }
-  }
-
-  //возвращает количество товаров в козине
-  int getCount() {
-    int count  = 0;
-    _productMap.forEach((key, value) {
-      count = count + value.count;
-    });
-    return count;
+    return "К оплате: ${getString(tmp)}";
   }
 
   //возвращает список товаров корзины
-  List<BasketProduct> getProductList() {
-    return _productMap.values.toList();
+  List<Product> getProductList() {
+    return [..._productList];
   }
 
   //возвращает проверку козины на пустоту
   bool isEmpty() {
-    if(_productMap.isEmpty) {
-      return true;
-    } else {
-      return false;
-    }
+    return _productList.isEmpty;
   }
-
 
 }

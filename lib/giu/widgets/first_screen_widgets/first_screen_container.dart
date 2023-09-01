@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:keyboard_shop/core/model_objects/product_objects/product.dart';
 import '../basket_screen_widgets/basket_widget.dart';
 import 'basket_icon_widget.dart';
 import 'product_listview.dart';
@@ -13,7 +12,7 @@ class FirstScreenContainer extends StatelessWidget {
       body: Container(
         color: Colors.black87,
         padding: const EdgeInsets.all(7),
-        child: ListWidget(),
+        child: const ListWidget(),
       ),
       appBar: AppBar(
         title: const Text(
