@@ -4,7 +4,7 @@ import '../core/models/basket_model.dart';
 import '../GIU/widgets/first_screen_widgets/first_screen_container.dart';
 
 
-void main() async {
+void main() {
   runApp(
     MultiProvider(
       providers: [
