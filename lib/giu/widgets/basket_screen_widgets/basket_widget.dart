@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:keyboard_shop/core/model_objects/product_objects/product.dart';
+import 'package:keyboard_shop/core/model_objects/product_objects/basket_product.dart';
 import 'package:keyboard_shop/core/models/basket_model.dart';
 import 'package:provider/provider.dart';
 
@@ -89,7 +89,7 @@ class BasketWidget extends StatelessWidget {
   }
 
   //listViewBuilder
-  Widget listViewBuilder(BuildContext context, int index, List<Product> list) {
+  Widget listViewBuilder(BuildContext context, int index, List<BasketProduct> list) {
     if(index == list.length) {
       return Container(
         height: 75,
@@ -101,7 +101,7 @@ class BasketWidget extends StatelessWidget {
   }
 
   //listViewItem
-  Widget listItem(BuildContext context, int index, List<Product> list) {
+  Widget listItem(BuildContext context, int index, List<BasketProduct> list) {
     return
       Container(
           margin: const EdgeInsets.symmetric(vertical: 3),
@@ -158,7 +158,12 @@ class BasketWidget extends StatelessWidget {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                context.read<BasketModel>().addToBasket(list[index]);
+                                context.read<BasketModel>().addToBasket(
+                                  list[index].id,
+                                  list[index].image,
+                                  list[index].name,
+                                  list[index].price,
+                                );
                               },
                               child: Container(
                                 margin: const EdgeInsets.all(3),
@@ -200,7 +205,9 @@ class BasketWidget extends StatelessWidget {
                             ),
                             GestureDetector(
                               onTap: () {
-                                context.read<BasketModel>().removeFromBasket(list[index]);
+                                context.read<BasketModel>().removeFromBasket(
+                                  list[index].id,
+                                );
                               },
                               child: Container(
                                 margin: const EdgeInsets.all(3),

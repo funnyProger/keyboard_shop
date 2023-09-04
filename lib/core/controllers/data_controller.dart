@@ -1,15 +1,16 @@
 import 'dart:async';
-import '../model_objects/product_objects/product.dart';
+import 'package:keyboard_shop/core/model_objects/product_objects/basket_product.dart';
+import 'package:keyboard_shop/core/model_objects/product_objects/product.dart';
 import 'get_data.dart';
 
 class GetDataInterface {
   getProductDataFromJson() {}
   initBasketDataBase() {}
-  insetIntoBasketDB(Product product) {}
+  insetIntoBasketDB(BasketProduct product) {}
   getAllDataFormBasketDB() {}
   deleteDataFromBasketDB(int id) {}
   deleteAllDataFromBasketDB() {}
-  updateDataInBasketDB(Product product) {}
+  updateDataInBasketDB(BasketProduct product) {}
   getDataBaseTableCount() {}
 }
 
@@ -20,7 +21,7 @@ class Controller {
     return _dataObject.getProductDataFromJson();
   }
 
-  Future<List<Product>> getBasketData() async {
+  Future<List<BasketProduct>> getBasketData() async {
     return await _dataObject.getAllDataFormBasketDB();
   }
 
@@ -28,8 +29,8 @@ class Controller {
     _dataObject.deleteDataFromBasketDB(id);
   }
 
-  void addBasketData(Product product) {
-    _dataObject.insetIntoBasketDB(product);
+  void addBasketData(BasketProduct basketProduct) {
+    _dataObject.insetIntoBasketDB(basketProduct);
   }
 
   void deleteAllBasketData() {
@@ -40,8 +41,8 @@ class Controller {
     _dataObject.initBasketDataBase();
   }
 
-  void updateBasketData(Product product) {
-    _dataObject.updateDataInBasketDB(product);
+  void updateBasketData(BasketProduct basketProduct) {
+    _dataObject.updateDataInBasketDB(basketProduct);
   }
   Future<int> getBasketDBCount() {
     return _dataObject.getDataBaseTableCount();

@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:keyboard_shop/core/model_objects/product_objects/product.dart';
+import 'package:keyboard_shop/core/model_objects/product_objects/basket_product.dart';
 import 'package:keyboard_shop/core/models/basket_model.dart';
 import '../../controllers/data_controller.dart';
 
@@ -9,7 +9,7 @@ class Basket {
   static final Basket _instance = Basket._();
   static Controller controller = Controller();
 
-  static List<Product> _productList = [];
+  static List<BasketProduct> _productList = [];
 
 
   static initList() async {
@@ -27,11 +27,11 @@ class Basket {
   }
 
   //добавляет товар в корзину
-  void add(Product product) {
+  void add(BasketProduct basketProduct) {
     if (_productList.isNotEmpty) {
       bool trueOrFalse = true;
       for (int i = 0; i < _productList.length; i++) {
-        if (product.id == _productList[i].id) {
+        if (basketProduct.id == _productList[i].id) {
           _productList[i].count++;
           controller.updateBasketData(_productList[i]);
           trueOrFalse = false;
@@ -39,23 +39,23 @@ class Basket {
         }
       }
       if(trueOrFalse) {
-        _productList.add(product);
-        controller.addBasketData(product);
+        _productList.add(basketProduct);
+        controller.addBasketData(basketProduct);
       }
     } else {
-      _productList.add(product);
-      controller.addBasketData(product);
+      _productList.add(basketProduct);
+      controller.addBasketData(basketProduct);
     }
     initList();
   }
 
   //удаляет товар из корзины
-  void remove(Product product) {
+  void remove(int id) {
     for(int i = 0; i < _productList.length; i++) {
-      if(_productList[i] == product) {
+      if(_productList[i].id == id) {
         if(_productList[i].count == 1) {
+          controller.deleteBasketData(_productList[i].id);
           _productList.removeAt(i);
-          controller.deleteBasketData(product.id);
           return;
         } else {
           _productList[i].count--;
@@ -88,7 +88,7 @@ class Basket {
   }
 
   //возвращает список товаров корзины
-  List<Product> getProductList() {
+  List<BasketProduct> getProductList() {
     return [..._productList];
   }
 

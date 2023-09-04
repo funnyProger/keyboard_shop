@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:keyboard_shop/core/model_objects/product_objects/basket_product.dart';
 import 'package:keyboard_shop/core/model_objects/product_objects/product.dart';
 import 'data_controller.dart';
 import 'package:path/path.dart';
@@ -49,27 +50,26 @@ class GetData implements GetDataInterface {
                 image text,
                 name text,
                 price integer,
-                description text,
                 count integer
             )'''
     );
   }
 
   @override
-  Future<void> insetIntoBasketDB(Product product) async {
+  Future<void> insetIntoBasketDB(BasketProduct basketProduct) async {
     final db = await database;
     await db.insert(
       'basket',
-      product.toSQLite(),
+      basketProduct.toSQLite(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
   @override
-  Future<List<Product>> getAllDataFormBasketDB() async {
+  Future<List<BasketProduct>> getAllDataFormBasketDB() async {
     final db = await database;
     final products = await db.rawQuery('select * from basket');
-    return products.map((product) => Product.fromSqfliteDatabase(product)).toList();
+    return products.map((product) => BasketProduct.fromSqfliteDatabase(product)).toList();
   }
 
   @override
@@ -85,13 +85,13 @@ class GetData implements GetDataInterface {
   }
 
   @override
-  Future<void> updateDataInBasketDB(Product product) async {
+  Future<void> updateDataInBasketDB(BasketProduct basketProduct) async {
     final db = await database;
     await db.update(
-      "basket",
-      product.toSQLite(),
-      where: 'id = ?',
-      whereArgs: [product.id]
+        "basket",
+        basketProduct.toSQLite(),
+        where: 'id = ?',
+        whereArgs: [basketProduct.id]
     );
   }
 
