@@ -5,6 +5,7 @@ class BasketProduct {
   final int price;
   int count;
 
+
   BasketProduct({
     this.count = 1,
     required this.id,
@@ -13,7 +14,8 @@ class BasketProduct {
     required this.price,
   });
 
-  factory BasketProduct.fromSqfliteDatabase(Map<String, dynamic> map) {
+
+  factory BasketProduct.fromJson(Map<String, dynamic> map) {
     return BasketProduct(
       id: map['id'],
       image: map['image'],
@@ -23,7 +25,8 @@ class BasketProduct {
     );
   }
 
-  Map<String, dynamic> toSQLite() {
+
+  Map<String, dynamic> toJson() {
     return {
       'id': id,
       'image': image,
@@ -32,5 +35,4 @@ class BasketProduct {
       'count': count,
     };
   }
-
 }

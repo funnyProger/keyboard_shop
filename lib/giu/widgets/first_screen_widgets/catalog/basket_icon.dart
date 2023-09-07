@@ -2,18 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:keyboard_shop/core/models/basket_model.dart';
 import 'package:provider/provider.dart';
 
-class BasketIconWidget extends StatefulWidget {
+class BasketIconWidget extends StatelessWidget {
   const BasketIconWidget({super.key});
-
-  @override
-  State<BasketIconWidget> createState() => BasketIconWidgetState();
-}
-
-class BasketIconWidgetState extends State<BasketIconWidget> {
 
 
   @override
   Widget build(BuildContext context) {
+
     return FutureBuilder(
       future: context.watch<BasketModel>().getBasketCount(),
       builder: (context, snapshot) {
@@ -48,11 +43,13 @@ class BasketIconWidgetState extends State<BasketIconWidget> {
                       style: const TextStyle(fontSize: 11, color: Colors.white),
                       textDirection: TextDirection.ltr,
                     ),
-                  ))
+                  )
+              )
             ],
           );
         }
-      },
+        },
     );
+
   }
 }

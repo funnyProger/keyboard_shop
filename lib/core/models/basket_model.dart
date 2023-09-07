@@ -1,15 +1,17 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:keyboard_shop/core/controllers/data_controller.dart';
-import 'package:keyboard_shop/core/model_objects/basket_objects/basket.dart';
-import 'package:keyboard_shop/core/model_objects/product_objects/basket_product.dart';
+import 'package:keyboard_shop/data/model_objects/basket.dart';
+import 'package:keyboard_shop/data/model_objects/basket_product.dart';
+import 'package:keyboard_shop/data/controllers/database_controller.dart';
 
 class BasketModel extends ChangeNotifier {
   final Basket _basket = Basket.getInstance();
 
+
   void initBasketFromDB() {
     Basket.initList();
   }
+
 
   void addToBasket(int id, String image, String name, int price) {
     _basket.add(
@@ -23,35 +25,40 @@ class BasketModel extends ChangeNotifier {
     notifyListeners();
   }
 
+
   void removeFromBasket(int id) {
     _basket.remove(id);
     notifyListeners();
   }
+
 
   void buy() {
     _basket.buy();
     notifyListeners();
   }
 
+
   String getBasketPrice() {
     return _basket.getPrice();
   }
 
+
   Future<int> getBasketCount() async {
-    return Controller().getBasketDBCount();
+    return DatabaseController().getTableCount('basket');
   }
+
 
   List<BasketProduct> getBasketList() {
     return _basket.getProductList();
   }
 
-  bool basketIsEmpty() {
+
+  bool isBasketEmpty() {
     return _basket.isEmpty();
   }
 }
 
-//преобразует цену типа Int в тип String нужного вида
-String getString(int price) {
+String getValidPrice(int price) {
   String str = price.toString();
   List<String> listChar = str.split('').toList();
   str = '';
