@@ -45,7 +45,7 @@ class InfoWidget extends StatelessWidget {
                                   .read<FavoritesModel>()
                                   .productDistributor(product);
                             },
-                            child: FavoriteIcon(product: product),
+                            child: FavoriteIcon(id: product.id),
                           ),
                         ),
                       ],
