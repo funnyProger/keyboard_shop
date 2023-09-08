@@ -10,8 +10,10 @@ class Favorites {
 
 
   static initList() async {
+    print(_favoritesList);
     try {
       _favoritesList = await controller.getDataFromTable('favorites') as List<FavoriteProduct>;
+      print(_favoritesList);
     } catch (e) {
       if (kDebugMode) {
         print(e);
@@ -33,6 +35,7 @@ class Favorites {
   void add(FavoriteProduct favoriteProduct) {
     _favoritesList.add(favoriteProduct);
     controller.addDataToTable(favoriteProduct, 'favorites');
+    initList();
   }
 
 
@@ -44,6 +47,7 @@ class Favorites {
         return;
       }
     }
+    initList();
   }
 
 
