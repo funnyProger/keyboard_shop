@@ -122,7 +122,7 @@ class ListViewItemWidget extends StatelessWidget {
                                     getSnackBar('Успешно дабавлено'));
                               }
                             },
-                            child: FavoriteIcon(id: product.id),
+                            child: FavoriteIcon(product: product),
                           ),
                         ),
                       ],
