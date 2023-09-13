@@ -8,11 +8,6 @@ class BasketModel extends ChangeNotifier {
   final Basket _basket = Basket.getInstance();
 
 
-  void initBasketFromDB() {
-    Basket.initList();
-  }
-
-
   void addToBasket(int id, String image, String name, int price) {
     _basket.add(
         BasketProduct(
@@ -57,6 +52,7 @@ class BasketModel extends ChangeNotifier {
     return _basket.isEmpty();
   }
 }
+
 
 String getValidPrice(int price) {
   String str = price.toString();

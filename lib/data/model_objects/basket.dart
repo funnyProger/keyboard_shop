@@ -47,8 +47,6 @@ class Basket {
       _productList.add(basketProduct);
       controller.addDataToTable(basketProduct, 'basket');
     }
-    
-    initList();
   }
 
 
@@ -69,8 +67,6 @@ class Basket {
       }
 
     }
-
-    initList();
   }
 
 

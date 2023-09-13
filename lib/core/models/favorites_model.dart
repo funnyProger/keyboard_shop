@@ -7,11 +7,6 @@ class FavoritesModel extends ChangeNotifier {
   final Favorites _favorites = Favorites.getInstance();
 
 
-  void initFavoritesFromDB() {
-    Favorites.initList();
-  }
-
-
   void productDistributor(var product) {
     if(isProductContainsInFavorites(product.id)) {
       deleteFromFavorites(product.id);
@@ -35,12 +30,12 @@ class FavoritesModel extends ChangeNotifier {
 
 
   void addToFavorites(Product product) {
-    FavoriteProduct favoriteProduct = createAndGetFavoriteProduct(product);
+    FavoriteProduct favoriteProduct = _createAndGetFavoriteProduct(product);
     _favorites.add(favoriteProduct);
   }
 
 
-  FavoriteProduct createAndGetFavoriteProduct(Product product) {
+  FavoriteProduct _createAndGetFavoriteProduct(Product product) {
     return FavoriteProduct(
         id: product.id,
         image: product.image,

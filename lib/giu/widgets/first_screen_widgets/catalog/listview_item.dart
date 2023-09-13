@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:keyboard_shop/core/models/basket_model.dart';
 import 'package:keyboard_shop/core/models/favorites_model.dart';
+import 'package:keyboard_shop/data/model_objects/base_product.dart';
 import 'package:keyboard_shop/giu/widgets/first_screen_widgets/catalog/favorite_icon.dart';
 import 'package:keyboard_shop/giu/widgets/info_screen_widgets/info_screen_container.dart';
 import 'package:provider/provider.dart';
@@ -8,7 +9,7 @@ import 'package:provider/provider.dart';
 
 class ListViewItemWidget extends StatelessWidget {
   const ListViewItemWidget({super.key, required this.product});
-  final dynamic product;
+  final BaseProduct product;
 
 
   @override
