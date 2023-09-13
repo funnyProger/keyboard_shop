@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:keyboard_shop/data/model_objects/base_product.dart';
 import 'package:keyboard_shop/data/model_objects/favorite_product.dart';
 import 'package:keyboard_shop/data/model_objects/favorites.dart';
-import 'package:keyboard_shop/data/model_objects/product.dart';
 
 class FavoritesModel extends ChangeNotifier {
   final Favorites _favorites = Favorites.getInstance();
 
 
-  void productDistributor(var product) {
+  void productDistributor<T extends BaseProduct> (T product) {
     if(isProductContainsInFavorites(product.id)) {
       deleteFromFavorites(product.id);
     } else {
@@ -29,13 +29,13 @@ class FavoritesModel extends ChangeNotifier {
   }
 
 
-  void addToFavorites(Product product) {
+  void addToFavorites<T extends BaseProduct> (T product) {
     FavoriteProduct favoriteProduct = _createAndGetFavoriteProduct(product);
     _favorites.add(favoriteProduct);
   }
 
 
-  FavoriteProduct _createAndGetFavoriteProduct(Product product) {
+  FavoriteProduct _createAndGetFavoriteProduct<T extends BaseProduct>(T product) {
     return FavoriteProduct(
         id: product.id,
         image: product.image,

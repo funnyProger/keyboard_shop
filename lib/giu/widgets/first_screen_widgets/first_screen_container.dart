@@ -42,7 +42,10 @@ class _FirstScreenContainerState extends State<FirstScreenContainer> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-        body: _pages[_currentNavIndex],
+        body: IndexedStack(
+          index: _currentNavIndex,
+          children: _pages,
+        ),
         backgroundColor: const Color.fromARGB(255, 24, 24, 24),
         appBar: AppBar(
           backgroundColor: Colors.black,
