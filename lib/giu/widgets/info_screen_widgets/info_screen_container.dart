@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:keyboard_shop/GIU/widgets/first_screen_widgets/catalog/basket_icon.dart';
+import 'package:keyboard_shop/data/model_objects/base_product.dart';
 import 'package:keyboard_shop/giu/widgets/basket_screen_widgets/basket_screen_container.dart';
 import 'info.dart';
 
 class InfoScreenContainer extends StatelessWidget {
   const InfoScreenContainer({super.key, required this.product});
-  final dynamic product;
+  final BaseProduct product;
 
 
   @override

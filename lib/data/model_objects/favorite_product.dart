@@ -1,20 +1,15 @@
-import 'package:flutter/foundation.dart';
+import 'package:keyboard_shop/data/model_objects/base_product.dart';
 
-class FavoriteProduct with ChangeNotifier {
-  final int id;
-  final String image;
-  final String name;
-  final int price;
-  final String description;
+class FavoriteProduct extends BaseProduct{
   bool isAddToFavorite;
 
 
   FavoriteProduct({
-    required this.id,
-    required this.image,
-    required this.name,
-    required this.price,
-    required this.description,
+    required super.id,
+    required super.image,
+    required super.name,
+    required super.price,
+    required super.description,
     this.isAddToFavorite = false,
   });
 

@@ -15,7 +15,7 @@ abstract class GetDataFromDatabaseInterface {
 class DatabaseController {
   final GetDataFromDatabaseInterface _dataObject = GetDataFromDatabase();
 
-
+  
   void initDB() {
     _dataObject.initDatabase();
   }

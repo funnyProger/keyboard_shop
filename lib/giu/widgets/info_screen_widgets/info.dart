@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:keyboard_shop/core/models/basket_model.dart';
 import 'package:keyboard_shop/core/models/favorites_model.dart';
+import 'package:keyboard_shop/data/model_objects/base_product.dart';
 import 'package:keyboard_shop/giu/widgets/first_screen_widgets/catalog/listview_item.dart';
 import 'package:keyboard_shop/giu/widgets/first_screen_widgets/catalog/favorite_icon.dart';
 import 'package:provider/provider.dart';
 
 class InfoWidget extends StatelessWidget {
   const InfoWidget({super.key, required this.product});
-  final dynamic product;
+  final BaseProduct product;
 
 
   @override
@@ -45,7 +46,7 @@ class InfoWidget extends StatelessWidget {
                                   .read<FavoritesModel>()
                                   .productDistributor(product);
                             },
-                            child: FavoriteIcon(product: product),
+                            child: FavoriteIcon(id: product.id),
                           ),
                         ),
                       ],

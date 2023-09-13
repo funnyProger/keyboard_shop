@@ -1,17 +1,13 @@
-class Product {
-  final int id;
-  final String image;
-  final String name;
-  final int price;
-  final String description;
+import 'base_product.dart';
 
+class Product extends BaseProduct{
 
   Product({
-    required this.id,
-    required this.image,
-    required this.name,
-    required this.price,
-    required this.description,
+    required super.id,
+    required super.image,
+    required super.name,
+    required super.price,
+    required super.description,
   });
 
 
