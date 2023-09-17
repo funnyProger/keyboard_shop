@@ -1,4 +1,4 @@
-import 'package:keyboard_shop/data/model_objects/base_product.dart';
+import 'package:keyboard_shop/data/model_objects/product/base_product.dart';
 
 class FavoriteProduct extends BaseProduct{
   bool isAddToFavorite;

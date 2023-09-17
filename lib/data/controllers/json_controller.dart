@@ -1,5 +1,5 @@
 import 'package:keyboard_shop/data/get_data/from_server/get_json_data.dart';
-import 'package:keyboard_shop/data/model_objects/product.dart';
+import 'package:keyboard_shop/data/model_objects/product/product.dart';
 
 abstract class JsonDataInterface {
   getProductDataFromJson();
@@ -7,10 +7,10 @@ abstract class JsonDataInterface {
 
 
 class JsonController {
-  final JsonDataInterface _dataObject = JsonData();
+  final JsonDataInterface _implementationObject = JsonData();
 
 
   Future<List<Product>> getProductList() async {
-    return _dataObject.getProductDataFromJson();
+    return _implementationObject.getProductDataFromJson();
   }
 }

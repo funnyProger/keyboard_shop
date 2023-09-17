@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:keyboard_shop/data/controllers/json_controller.dart';
-import 'package:keyboard_shop/data/model_objects/product.dart';
+import 'package:keyboard_shop/data/model_objects/product/product.dart';
 
 class JsonData extends JsonDataInterface {
 

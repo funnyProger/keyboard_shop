@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:keyboard_shop/data/model_objects/basket_product.dart';
-import 'package:keyboard_shop/core/models/basket_model.dart';
-import 'package:keyboard_shop/giu/widgets/first_screen_widgets/catalog/listview_item.dart';
+import 'package:keyboard_shop/core/models/cart_model.dart';
+import 'package:keyboard_shop/data/model_objects/cart/cart_product.dart';
+import 'package:keyboard_shop/giu/widgets/main_screen_widgets/catalog/listview_item.dart';
 import 'package:provider/provider.dart';
 
-class BasketWidget extends StatelessWidget {
-  const BasketWidget({super.key});
+class CartWidget extends StatelessWidget {
+  const CartWidget({super.key});
 
 
   @override
   Widget build(BuildContext context) {
 
-    if (context.watch<BasketModel>().isBasketEmpty()) {
+    if (context.watch<CartModel>().isCartEmpty()) {
       return const Center(
-        child: Text("Корзина пуста",
+        child: Text("Cart is empty",
             style: TextStyle(fontSize: 17, color: Colors.white54),
             textDirection: TextDirection.ltr),
       );
@@ -21,12 +21,12 @@ class BasketWidget extends StatelessWidget {
       return Stack(
         children: [
           ListView.builder(
-              itemCount: context.read<BasketModel>().getBasketList().length + 1,
+              itemCount: context.read<CartModel>().getCartList().length + 1,
               itemBuilder: (context, index) {
                 return listViewBuilder(
                   context,
                   index,
-                  context.watch<BasketModel>().getBasketList(),
+                  context.watch<CartModel>().getCartList(),
                 );
               }
               ),
@@ -34,10 +34,10 @@ class BasketWidget extends StatelessWidget {
               alignment: Alignment.bottomCenter,
               child: GestureDetector(
                 onTap: () {
-                  context.read<BasketModel>().buy();
+                  context.read<CartModel>().buy();
                   ScaffoldMessenger.of(context).removeCurrentSnackBar();
                   ScaffoldMessenger.of(context)
-                      .showSnackBar(getSnackBar('Успешно оплачено'));
+                      .showSnackBar(getSnackBar('Successfully paid'));
                 },
                 child: Container(
                   height: 50,
@@ -49,7 +49,7 @@ class BasketWidget extends StatelessWidget {
                     borderRadius: BorderRadius.circular(50),
                   ),
                   child: const Text(
-                    "Купить",
+                    "Buy",
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.white,
@@ -69,7 +69,7 @@ class BasketWidget extends StatelessWidget {
   Widget listViewBuilder(
       BuildContext context,
       int index,
-      List<BasketProduct> basketProductList
+      List<CartProduct> basketProductList
       ) {
     if (index == basketProductList.length) {
       return Container(
@@ -81,7 +81,7 @@ class BasketWidget extends StatelessWidget {
   }
 
 
-  Widget listItem(BuildContext context, int index, List<BasketProduct> basketProductList) {
+  Widget listItem(BuildContext context, int index, List<CartProduct> basketProductList) {
 
     return Container(
         margin: const EdgeInsets.symmetric(vertical: 3),
@@ -134,8 +134,8 @@ class BasketWidget extends StatelessWidget {
                           GestureDetector(
                             onTap: () {
                               context
-                                  .read<BasketModel>()
-                                  .addToBasket(
+                                  .read<CartModel>()
+                                  .addToCart(
                                     basketProductList[index].id,
                                     basketProductList[index].image,
                                     basketProductList[index].name,
@@ -180,8 +180,8 @@ class BasketWidget extends StatelessWidget {
                           GestureDetector(
                             onTap: () {
                               context
-                                  .read<BasketModel>()
-                                  .removeFromBasket(basketProductList[index].id);
+                                  .read<CartModel>()
+                                  .removeFromCart(basketProductList[index].id);
                             },
                             child: Container(
                               margin: const EdgeInsets.all(3),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:keyboard_shop/core/models/basket_model.dart';
+import 'package:keyboard_shop/core/models/cart_model.dart';
 import 'package:keyboard_shop/core/models/favorites_model.dart';
-import 'package:keyboard_shop/data/model_objects/base_product.dart';
-import 'package:keyboard_shop/giu/widgets/first_screen_widgets/catalog/listview_item.dart';
-import 'package:keyboard_shop/giu/widgets/first_screen_widgets/catalog/favorite_icon.dart';
+import 'package:keyboard_shop/data/model_objects/product/base_product.dart';
+import 'package:keyboard_shop/giu/widgets/main_screen_widgets/catalog/favorite_icon.dart';
+import 'package:keyboard_shop/giu/widgets/main_screen_widgets/catalog/listview_item.dart';
 import 'package:provider/provider.dart';
 
 class InfoWidget extends StatelessWidget {
@@ -46,7 +46,7 @@ class InfoWidget extends StatelessWidget {
                                   .read<FavoritesModel>()
                                   .productDistributor(product);
                             },
-                            child: FavoriteIcon(id: product.id),
+                            child: FavoriteIconWidget(id: product.id),
                           ),
                         ),
                       ],
@@ -101,7 +101,7 @@ class InfoWidget extends StatelessWidget {
                     padding: const EdgeInsets.only(
                         left: 15, top: 5, right: 15, bottom: 80),
                     child: Text(
-                      "Описание: \n\n${product.description}",
+                      "Description: \n\n${product.description}",
                       style: const TextStyle(fontSize: 17, color: Colors.white),
                       textDirection: TextDirection.ltr,
                     ),
@@ -111,8 +111,8 @@ class InfoWidget extends StatelessWidget {
                       child: GestureDetector(
                         onTap: () {
                           context
-                              .read<BasketModel>()
-                              .addToBasket(
+                              .read<CartModel>()
+                              .addToCart(
                                 product.id,
                                 product.image,
                                 product.name,
@@ -120,7 +120,7 @@ class InfoWidget extends StatelessWidget {
                               );
                           ScaffoldMessenger.of(context).removeCurrentSnackBar();
                           ScaffoldMessenger.of(context)
-                              .showSnackBar(getSnackBar('Успешно дабавлено'));
+                              .showSnackBar(getSnackBar('Successfully added'));
                         },
                         child: Container(
                           height: 50,
@@ -132,7 +132,7 @@ class InfoWidget extends StatelessWidget {
                             borderRadius: BorderRadius.circular(50),
                           ),
                           child: const Text(
-                            "В корзину",
+                            "Add to cart",
                             style: TextStyle(
                               fontSize: 20,
                               color: Colors.white,

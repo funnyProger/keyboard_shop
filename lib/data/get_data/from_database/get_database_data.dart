@@ -1,6 +1,7 @@
 import 'package:keyboard_shop/data/controllers/database_controller.dart';
-import 'package:keyboard_shop/data/model_objects/basket_product.dart';
-import 'package:keyboard_shop/data/model_objects/favorite_product.dart';
+import 'package:keyboard_shop/data/model_objects/cart/cart_product.dart';
+import 'package:keyboard_shop/data/model_objects/favorite/favorite_product.dart';
+import 'package:keyboard_shop/data/model_objects/user/new_user.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -25,7 +26,7 @@ class GetDataFromDatabase implements GetDataFromDatabaseInterface {
       version: 2,
       onCreate: (Database db, int version) async {
         await db.execute(
-            '''create table if not exists basket (
+            '''create table if not exists cart (
             id integer primary key, 
             image text,
             name text,
@@ -42,16 +43,25 @@ class GetDataFromDatabase implements GetDataFromDatabaseInterface {
             description text
             )'''
         );
+        await db.execute(
+            '''create table if not exists users (
+              id integer primary key autoincrement, 
+              image text,
+              name text,
+              phoneNumber text,
+              password text
+              )'''
+        );
       },
       onUpgrade: (Database db, int oldVersion, int newVersion) async {
         if(oldVersion < newVersion) {
           await db.execute(
-              '''create table if not exists favorites (
-              id integer primary key, 
+              '''create table if not exists users (
+              id integer primary key autoincrement, 
               image text,
               name text,
-              price integer,
-              description text
+              phoneNumber text,
+              password text
               )'''
           );
         }
@@ -63,18 +73,20 @@ class GetDataFromDatabase implements GetDataFromDatabaseInterface {
 
   @override
   Future<void> insetIntoTable(Object object, String tableName) async {
-    var objectProduct;
+    var dataObject;
 
-    if(tableName == 'basket') {
-      objectProduct = object as BasketProduct;
+    if(tableName == 'cart') {
+      dataObject = object as CartProduct;
     } else if(tableName == 'favorites') {
-      objectProduct = object as FavoriteProduct;
+      dataObject = object as FavoriteProduct;
+    } else if(tableName == 'users') {
+      dataObject = object as NewUser;
     }
 
     final db = await database;
     await db.insert(
       tableName,
-      objectProduct.toJson(),
+      dataObject.toJson(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
@@ -83,12 +95,14 @@ class GetDataFromDatabase implements GetDataFromDatabaseInterface {
   @override
   Future<List<Object>> getAllDataFormTable(String tableName) async {
     final db = await database;
-    final products = await db.rawQuery('select * from $tableName');
+    final dataObjects = await db.rawQuery('select * from $tableName');
 
-    if(tableName == 'basket') {
-      return products.map((product) => BasketProduct.fromJson(product)).toList();
+    if(tableName == 'cart') {
+      return dataObjects.map((product) => CartProduct.fromJson(product)).toList();
     } else if(tableName == 'favorites') {
-      return products.map((product) => FavoriteProduct.fromJson(product)).toList();
+      return dataObjects.map((product) => FavoriteProduct.fromJson(product)).toList();
+    } else if(tableName == 'users') {
+      return dataObjects.map((user) => NewUser.fromJson(user)).toList();
     } else {
       return [] as List<Object>;
     }
@@ -111,20 +125,22 @@ class GetDataFromDatabase implements GetDataFromDatabaseInterface {
 
   @override
   Future<void> updateDataInTable(Object object, String tableName) async {
-    var objectProduct;
+    var dataObject;
 
-    if(tableName == 'basket') {
-      objectProduct = object as BasketProduct;
+    if(tableName == 'cart') {
+      dataObject = object as CartProduct;
     } else if(tableName == 'favorites') {
-      objectProduct = object as FavoriteProduct;
+      dataObject = object as FavoriteProduct;
+    } else if(tableName == 'users') {
+      dataObject = object as NewUser;
     }
 
     final db = await database;
     await db.update(
         tableName,
-        objectProduct.toJson(),
+        dataObject.toJson(),
         where: 'id = ?',
-        whereArgs: [objectProduct.id]
+        whereArgs: [dataObject.id]
     );
   }
 

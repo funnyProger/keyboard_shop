@@ -1,4 +1,4 @@
-class BasketProduct {
+class CartProduct {
   final int id;
   final String image;
   final String name;
@@ -6,7 +6,7 @@ class BasketProduct {
   int count;
 
 
-  BasketProduct({
+  CartProduct({
     this.count = 1,
     required this.id,
     required this.image,
@@ -15,8 +15,8 @@ class BasketProduct {
   });
 
 
-  factory BasketProduct.fromJson(Map<String, dynamic> map) {
-    return BasketProduct(
+  factory CartProduct.fromJson(Map<String, dynamic> map) {
+    return CartProduct(
       id: map['id'],
       image: map['image'],
       name: map['name'],

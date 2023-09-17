@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:keyboard_shop/core/models/basket_model.dart';
+import 'package:keyboard_shop/core/models/cart_model.dart';
 import 'package:provider/provider.dart';
 
-class BasketIconWidget extends StatelessWidget {
-  const BasketIconWidget({super.key});
+class CartIconWidget extends StatelessWidget {
+  const CartIconWidget({super.key});
 
 
   @override
   Widget build(BuildContext context) {
 
     return FutureBuilder(
-      future: context.watch<BasketModel>().getBasketCount(),
+      future: context.watch<CartModel>().getCartCount(),
       builder: (context, snapshot) {
         if (snapshot.data == 0 || snapshot.hasError) {
           return Container(
             width: 29,
             margin: const EdgeInsets.only(right: 15),
-            child: Image.asset('assets/images/basket.png'),
+            child: Image.asset('assets/images/cart.png'),
           );
         } else {
           return Stack(
@@ -25,7 +25,7 @@ class BasketIconWidget extends StatelessWidget {
               Container(
                 height: 29,
                 margin: const EdgeInsets.only(right: 15),
-                child: Image.asset('assets/images/basket.png'),
+                child: Image.asset('assets/images/cart.png'),
               ),
               Positioned(
                   left: 20,

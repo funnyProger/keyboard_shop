@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:keyboard_shop/GIU/widgets/first_screen_widgets/catalog/basket_icon.dart';
-import 'package:keyboard_shop/data/model_objects/base_product.dart';
-import 'package:keyboard_shop/giu/widgets/basket_screen_widgets/basket_screen_container.dart';
+import 'package:keyboard_shop/data/model_objects/product/base_product.dart';
+import 'package:keyboard_shop/giu/widgets/cart_screen_widgets/cart_screen_container.dart';
+import 'package:keyboard_shop/giu/widgets/main_screen_widgets/catalog/cart_icon.dart';
 import 'info.dart';
 
-class InfoScreenContainer extends StatelessWidget {
-  const InfoScreenContainer({super.key, required this.product});
+class InfoScreenContainerWidget extends StatelessWidget {
+  const InfoScreenContainerWidget({super.key, required this.product});
   final BaseProduct product;
 
 
@@ -34,10 +34,10 @@ class InfoScreenContainer extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const BasketScreenContainer()),
+                        builder: (context) => const CartScreenContainerWidget()),
                   );
                 },
-                child: const BasketIconWidget()),
+                child: const CartIconWidget()),
           ],
         ),
       ),

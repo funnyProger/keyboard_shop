@@ -1,16 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:keyboard_shop/data/model_objects/basket.dart';
-import 'package:keyboard_shop/data/model_objects/basket_product.dart';
+import 'package:keyboard_shop/data/model_objects/cart/cart.dart';
 import 'package:keyboard_shop/data/controllers/database_controller.dart';
+import 'package:keyboard_shop/data/model_objects/cart/cart_product.dart';
 
-class BasketModel extends ChangeNotifier {
-  final Basket _basket = Basket.getInstance();
+class CartModel extends ChangeNotifier {
+  final Cart _cart = Cart.getInstance();
 
 
-  void addToBasket(int id, String image, String name, int price) {
-    _basket.add(
-        BasketProduct(
+  void addToCart(int id, String image, String name, int price) {
+    _cart.add(
+        CartProduct(
             id: id,
             image: image,
             name: name,
@@ -21,35 +21,35 @@ class BasketModel extends ChangeNotifier {
   }
 
 
-  void removeFromBasket(int id) {
-    _basket.remove(id);
+  void removeFromCart(int id) {
+    _cart.remove(id);
     notifyListeners();
   }
 
 
   void buy() {
-    _basket.buy();
+    _cart.buy();
     notifyListeners();
   }
 
 
-  String getBasketPrice() {
-    return _basket.getPrice();
+  String getCartPrice() {
+    return _cart.getPrice();
   }
 
 
-  Future<int> getBasketCount() async {
-    return DatabaseController().getTableCount('basket');
+  Future<int> getCartCount() async {
+    return DatabaseController().getTableCount('cart');
   }
 
 
-  List<BasketProduct> getBasketList() {
-    return _basket.getProductList();
+  List<CartProduct> getCartList() {
+    return _cart.getProductList();
   }
 
 
-  bool isBasketEmpty() {
-    return _basket.isEmpty();
+  bool isCartEmpty() {
+    return _cart.isEmpty();
   }
 }
 

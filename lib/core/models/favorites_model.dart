@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:keyboard_shop/data/model_objects/base_product.dart';
-import 'package:keyboard_shop/data/model_objects/favorite_product.dart';
-import 'package:keyboard_shop/data/model_objects/favorites.dart';
+import 'package:keyboard_shop/data/model_objects/product/base_product.dart';
+import 'package:keyboard_shop/data/model_objects/favorite/favorite_product.dart';
+import 'package:keyboard_shop/data/model_objects/favorite/favorites.dart';
 
 class FavoritesModel extends ChangeNotifier {
   final Favorites _favorites = Favorites.getInstance();
@@ -36,14 +36,19 @@ class FavoritesModel extends ChangeNotifier {
 
 
   FavoriteProduct _createAndGetFavoriteProduct<T extends BaseProduct>(T product) {
-    return FavoriteProduct(
+    if(product is FavoriteProduct) {
+      product.isAddToFavorite = true;
+      return product;
+    } else {
+      return FavoriteProduct(
         id: product.id,
         image: product.image,
         name: product.name,
         price: product.price,
         description: product.description,
         isAddToFavorite: true,
-    );
+      );
+    }
   }
 
 

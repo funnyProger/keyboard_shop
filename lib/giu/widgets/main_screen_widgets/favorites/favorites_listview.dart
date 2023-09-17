@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:keyboard_shop/core/models/favorites_model.dart';
-import 'package:keyboard_shop/giu/widgets/first_screen_widgets/catalog/listview_item.dart';
+import 'package:keyboard_shop/giu/widgets/main_screen_widgets/catalog/listview_item.dart';
 import 'package:provider/provider.dart';
 
 class FavoritesWidget extends StatelessWidget {
@@ -13,7 +13,7 @@ class FavoritesWidget extends StatelessWidget {
     if(context.watch<FavoritesModel>().isFavoritesEmpty()) {
       return const Center(
         child: Text(
-            "Избранное",
+            "Favorites",
             style: TextStyle(fontSize: 17, color: Colors.white54),
             textDirection: TextDirection.ltr
         ),

@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:keyboard_shop/core/models/favorites_model.dart';
-import 'package:keyboard_shop/data/model_objects/basket.dart';
-import 'package:keyboard_shop/data/model_objects/favorites.dart';
+import 'package:keyboard_shop/data/model_objects/cart/cart.dart';
+import 'package:keyboard_shop/data/model_objects/favorite/favorites.dart';
+import 'package:keyboard_shop/giu/widgets/main_screen_widgets/main_screen_container.dart';
 import 'package:provider/provider.dart';
-import '../core/models/basket_model.dart';
-import '../GIU/widgets/first_screen_widgets/first_screen_container.dart';
+import '../core/models/cart_model.dart';
 
 
 void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
-  await Basket.initList();
+  await Cart.initList();
   await Favorites.initList();
 
 
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => BasketModel()),
+        ChangeNotifierProvider(create: (context) => CartModel()),
         ChangeNotifierProvider(create: (context) => FavoritesModel()),
       ],
       child: const MyApp(),
@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       home: DefaultTabController(
           length: 2,
-          child: FirstScreenContainer(),
+          child: MainScreenContainerWidget(),
       ),
       debugShowCheckedModeBanner: false,
     );

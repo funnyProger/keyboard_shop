@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:keyboard_shop/core/models/favorites_model.dart';
 import 'package:provider/provider.dart';
 
-class FavoriteIcon extends StatelessWidget {
-  const FavoriteIcon({super.key, required this.id});
+class FavoriteIconWidget extends StatelessWidget {
+  const FavoriteIconWidget({super.key, required this.id});
   final int id;
 
 

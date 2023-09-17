@@ -13,40 +13,40 @@ abstract class GetDataFromDatabaseInterface {
 
 
 class DatabaseController {
-  final GetDataFromDatabaseInterface _dataObject = GetDataFromDatabase();
+  final GetDataFromDatabaseInterface _implementationObject = GetDataFromDatabase();
 
   
   void initDB() {
-    _dataObject.initDatabase();
+    _implementationObject.initDatabase();
   }
 
 
   Future<List<Object>> getDataFromTable(String tableName) async {
-    return await _dataObject.getAllDataFormTable(tableName);
+    return await _implementationObject.getAllDataFormTable(tableName);
   }
 
 
   void addDataToTable(Object object, String tableName) {
-    _dataObject.insetIntoTable(object, tableName);
+    _implementationObject.insetIntoTable(object, tableName);
   }
 
 
   void deleteTableData(int id, String tableName) {
-    _dataObject.deleteDataFromTable(id, tableName);
+    _implementationObject.deleteDataFromTable(id, tableName);
   }
 
 
   void deleteAllTableData(String tableName) {
-    _dataObject.deleteAllDataFromTable(tableName);
+    _implementationObject.deleteAllDataFromTable(tableName);
   }
 
 
   void updateTableData(Object object, String tableName) {
-    _dataObject.updateDataInTable(object, tableName);
+    _implementationObject.updateDataInTable(object, tableName);
   }
 
 
   Future<int> getTableCount(String tableName) {
-    return _dataObject.getDataBaseTableCount(tableName);
+    return _implementationObject.getDataBaseTableCount(tableName);
   }
 }

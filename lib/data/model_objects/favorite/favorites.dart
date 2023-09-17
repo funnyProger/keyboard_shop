@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:keyboard_shop/data/controllers/database_controller.dart';
-import 'package:keyboard_shop/data/model_objects/favorite_product.dart';
+import 'package:keyboard_shop/data/model_objects/favorite/favorite_product.dart';
 
 class Favorites {
   Favorites._();

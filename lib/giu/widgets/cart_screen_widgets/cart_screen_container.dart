@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:keyboard_shop/GIU/widgets/basket_screen_widgets/basket_widget.dart';
-import 'package:keyboard_shop/core/models/basket_model.dart';
+import 'package:keyboard_shop/core/models/cart_model.dart';
+import 'package:keyboard_shop/giu/widgets/cart_screen_widgets/cart_widget.dart';
 import 'package:provider/provider.dart';
 
-class BasketScreenContainer extends StatelessWidget {
-  const BasketScreenContainer({super.key});
+class CartScreenContainerWidget extends StatelessWidget {
+  const CartScreenContainerWidget({super.key});
 
 
   @override
@@ -19,11 +19,11 @@ class BasketScreenContainer extends StatelessWidget {
           backgroundColor: const Color.fromARGB(255, 24, 24, 24),
           body: Container(
             padding: const EdgeInsets.all(7),
-            child: const BasketWidget(),
+            child: const CartWidget(),
           ),
           appBar: AppBar(
             title: Text(
-              context.watch<BasketModel>().getBasketPrice(),
+              context.watch<CartModel>().getCartPrice(),
               style: const TextStyle(fontSize: 20, color: Colors.white),
               textDirection: TextDirection.ltr,
             ),

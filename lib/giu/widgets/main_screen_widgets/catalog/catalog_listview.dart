@@ -1,8 +1,8 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:keyboard_shop/data/controllers/json_controller.dart';
-import 'package:keyboard_shop/data/model_objects/product.dart';
-import 'package:keyboard_shop/giu/widgets/first_screen_widgets/catalog/listview_item.dart';
+import 'package:keyboard_shop/data/model_objects/product/product.dart';
+import 'listview_item.dart';
 
 class ListWidget extends StatefulWidget {
   const ListWidget({super.key});

@@ -1,18 +1,19 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:keyboard_shop/giu/widgets/basket_screen_widgets/basket_screen_container.dart';
-import 'package:keyboard_shop/giu/widgets/first_screen_widgets/catalog/catalog_listview.dart';
-import 'package:keyboard_shop/giu/widgets/first_screen_widgets/favorites/favorites_listview.dart';
-import 'catalog/basket_icon.dart';
+import 'package:keyboard_shop/giu/widgets/cart_screen_widgets/cart_screen_container.dart';
+import 'package:keyboard_shop/giu/widgets/main_screen_widgets/user_profile/profile.dart';
+import 'catalog/cart_icon.dart';
+import 'catalog/catalog_listview.dart';
+import 'favorites/favorites_listview.dart';
 
-class FirstScreenContainer extends StatefulWidget {
-  const FirstScreenContainer({super.key});
+class MainScreenContainerWidget extends StatefulWidget {
+  const MainScreenContainerWidget({super.key});
 
   @override
-  State<FirstScreenContainer> createState() => _FirstScreenContainerState();
+  State<MainScreenContainerWidget> createState() => _MainScreenContainerWidgetState();
 }
 
-class _FirstScreenContainerState extends State<FirstScreenContainer> {
+class _MainScreenContainerWidgetState extends State<MainScreenContainerWidget> {
   int _currentNavIndex = 0;
   final List<Widget> _pages = [
     Container(
@@ -23,6 +24,10 @@ class _FirstScreenContainerState extends State<FirstScreenContainer> {
       padding: const EdgeInsets.all(7),
       child: const FavoritesWidget(),
     ),
+    Container(
+      padding: const EdgeInsets.all(7),
+      child: const UserProfileWidget(),
+    )
   ];
   final List<Icon> icons = [
     const Icon(
@@ -35,6 +40,11 @@ class _FirstScreenContainerState extends State<FirstScreenContainer> {
       color: Colors.white,
       size: 35,
     ),
+    const Icon(
+      Icons.account_circle_outlined,
+      color: Colors.white,
+      size: 35,
+    )
   ];
 
 
@@ -60,10 +70,11 @@ class _FirstScreenContainerState extends State<FirstScreenContainer> {
                 ScaffoldMessenger.of(context).removeCurrentSnackBar();
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const BasketScreenContainer()),
+                  MaterialPageRoute(builder: (context) =>
+                  const CartScreenContainerWidget()),
                 );
               },
-              child: const BasketIconWidget(),
+              child: const CartIconWidget(),
             ),
           ],
         ),

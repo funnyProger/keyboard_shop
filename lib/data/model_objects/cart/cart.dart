@@ -1,18 +1,18 @@
 import 'package:flutter/foundation.dart';
-import 'package:keyboard_shop/data/model_objects/basket_product.dart';
-import 'package:keyboard_shop/core/models/basket_model.dart';
+import 'package:keyboard_shop/core/models/cart_model.dart';
 import 'package:keyboard_shop/data/controllers/database_controller.dart';
+import 'cart_product.dart';
 
-class Basket {
-  Basket._();
-  static final Basket _instance = Basket._();
+class Cart {
+  Cart._();
+  static final Cart _instance = Cart._();
   static DatabaseController controller = DatabaseController();
-  static List<BasketProduct> _productList = [];
+  static List<CartProduct> _productList = [];
 
 
   static initList() async {
     try {
-      _productList = await controller.getDataFromTable('basket') as List<BasketProduct>;
+      _productList = await controller.getDataFromTable('cart') as List<CartProduct>;
     } catch (e) {
       if (kDebugMode) {
         print(e);
@@ -21,31 +21,31 @@ class Basket {
   }
 
 
-  static Basket getInstance() {
+  static Cart getInstance() {
     return _instance;
   }
 
 
-  void add(BasketProduct basketProduct) {
+  void add(CartProduct cartProduct) {
     if (_productList.isNotEmpty) {
-      bool isNotContainsBasketProduct = true;
+      bool isNotContainsCartProduct = true;
       
       for (int i = 0; i < _productList.length; i++) {
-        if (basketProduct.id == _productList[i].id) {
+        if (cartProduct.id == _productList[i].id) {
           _productList[i].count++;
-          controller.updateTableData(_productList[i], 'basket');
-          isNotContainsBasketProduct = false;
+          controller.updateTableData(_productList[i], 'cart');
+          isNotContainsCartProduct = false;
           return;
         }
       }
       
-      if(isNotContainsBasketProduct) {
-        _productList.add(basketProduct);
-        controller.addDataToTable(basketProduct, 'basket');
+      if(isNotContainsCartProduct) {
+        _productList.add(cartProduct);
+        controller.addDataToTable(cartProduct, 'cart');
       }
     } else {
-      _productList.add(basketProduct);
-      controller.addDataToTable(basketProduct, 'basket');
+      _productList.add(cartProduct);
+      controller.addDataToTable(cartProduct, 'cart');
     }
   }
 
@@ -55,12 +55,12 @@ class Basket {
 
       if(_productList[i].id == id) {
         if(_productList[i].count == 1) {
-          controller.deleteTableData(_productList[i].id, 'basket');
+          controller.deleteTableData(_productList[i].id, 'cart');
           _productList.removeAt(i);
           return;
         } else {
           _productList[i].count--;
-          controller.updateTableData(_productList[i], 'basket');
+          controller.updateTableData(_productList[i], 'cart');
         }
         getPrice();
         return;
@@ -72,7 +72,7 @@ class Basket {
 
   void buy() {
     _productList.clear();
-    controller.deleteAllTableData('basket');
+    controller.deleteAllTableData('cart');
   }
 
 
@@ -80,18 +80,18 @@ class Basket {
     int tmp = 0;
 
     if (_productList.isEmpty) {
-      return "Корзина";
+      return "Cart";
     } else {
       for (int i = 0; i < _productList.length; i++) {
         tmp = tmp + (_productList[i].price * _productList[i].count);
       }
     }
 
-    return "К оплате: ${getValidPrice(tmp)}";
+    return "To pay: ${getValidPrice(tmp)}";
   }
 
 
-  List<BasketProduct> getProductList() {
+  List<CartProduct> getProductList() {
     return [..._productList];
   }
 

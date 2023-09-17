@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:keyboard_shop/core/models/basket_model.dart';
+import 'package:keyboard_shop/core/models/cart_model.dart';
 import 'package:keyboard_shop/core/models/favorites_model.dart';
-import 'package:keyboard_shop/data/model_objects/base_product.dart';
-import 'package:keyboard_shop/giu/widgets/first_screen_widgets/catalog/favorite_icon.dart';
+import 'package:keyboard_shop/data/model_objects/product/base_product.dart';
 import 'package:keyboard_shop/giu/widgets/info_screen_widgets/info_screen_container.dart';
 import 'package:provider/provider.dart';
+
+import 'favorite_icon.dart';
 
 
 class ListViewItemWidget extends StatelessWidget {
@@ -22,7 +23,7 @@ class ListViewItemWidget extends StatelessWidget {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      InfoScreenContainer(product: product)));
+                      InfoScreenContainerWidget(product: product)));
         },
         child: Padding(
           padding: const EdgeInsets.all(5),
@@ -30,7 +31,6 @@ class ListViewItemWidget extends StatelessWidget {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(17), color: Colors.white),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
                   flex: 16,
@@ -74,8 +74,8 @@ class ListViewItemWidget extends StatelessWidget {
                         GestureDetector(
                             onTap: () {
                               context
-                                  .read<BasketModel>()
-                                  .addToBasket(
+                                  .read<CartModel>()
+                                  .addToCart(
                                     product.id,
                                     product.image,
                                     product.name,
@@ -85,7 +85,7 @@ class ListViewItemWidget extends StatelessWidget {
                                   .removeCurrentSnackBar();
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(
-                                  getSnackBar('Успешно дабавлено'));
+                                  getSnackBar('Successfully added'));
                             },
                             child: Container(
                               padding:
@@ -98,7 +98,7 @@ class ListViewItemWidget extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(50),
                                     color: Colors.indigoAccent),
                                 child: const Text(
-                                  "В корзину",
+                                  "Add to cart",
                                   style: TextStyle(
                                       fontSize: 13, color: Colors.white),
                                   textDirection: TextDirection.ltr,
@@ -120,10 +120,10 @@ class ListViewItemWidget extends StatelessWidget {
                                     .removeCurrentSnackBar();
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(
-                                    getSnackBar('Успешно дабавлено'));
+                                    getSnackBar('Successfully added'));
                               }
                             },
-                            child: FavoriteIcon(id: product.id),
+                            child: FavoriteIconWidget(id: product.id),
                           ),
                         ),
                       ],
@@ -152,8 +152,8 @@ SnackBar getSnackBar(String snackBarMessage) {
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(100)),
     ),
-    backgroundColor: Colors.green,
-    margin: const EdgeInsets.only(left: 100, right: 100),
+    backgroundColor: Colors.black87,
+    margin: const EdgeInsets.only(left: 120, right: 120, bottom: 30),
   );
 
   return snackBar;
