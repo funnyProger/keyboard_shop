@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:keyboard_shop/core/models/cart_model.dart';
 import 'package:keyboard_shop/core/models/favorites_model.dart';
+import 'package:keyboard_shop/core/models/current_user_model.dart';
 import 'package:keyboard_shop/data/model_objects/product/base_product.dart';
 import 'package:keyboard_shop/giu/widgets/main_screen_widgets/catalog/favorite_icon.dart';
 import 'package:keyboard_shop/giu/widgets/main_screen_widgets/catalog/listview_item.dart';
@@ -42,9 +43,15 @@ class InfoWidget extends StatelessWidget {
                           right: 12,
                           child: GestureDetector(
                             onTap: () {
-                              context
-                                  .read<FavoritesModel>()
-                                  .productDistributor(product);
+                              if(context.read<CurrentUserModel>().isCurrentUserLoggedIn()) {
+                                context
+                                    .read<FavoritesModel>()
+                                    .productDistributor(product);
+                              } else {
+                                ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(getSnackBar('Please login'));
+                              }
                             },
                             child: FavoriteIconWidget(id: product.id),
                           ),
@@ -110,17 +117,23 @@ class InfoWidget extends StatelessWidget {
                       alignment: Alignment.bottomCenter,
                       child: GestureDetector(
                         onTap: () {
-                          context
-                              .read<CartModel>()
-                              .addToCart(
-                                product.id,
-                                product.image,
-                                product.name,
-                                product.price,
-                              );
-                          ScaffoldMessenger.of(context).removeCurrentSnackBar();
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(getSnackBar('Successfully added'));
+                          if(context.read<CurrentUserModel>().isCurrentUserLoggedIn()) {
+                            context
+                                .read<CartModel>()
+                                .addToCart(
+                              product.id,
+                              product.image,
+                              product.name,
+                              product.price,
+                            );
+                            ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(getSnackBar('Successfully added'));
+                          } else {
+                            ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(getSnackBar('Please login'));
+                          }
                         },
                         child: Container(
                           height: 50,

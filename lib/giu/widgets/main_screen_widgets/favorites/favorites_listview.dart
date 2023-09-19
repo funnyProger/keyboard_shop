@@ -28,7 +28,7 @@ class FavoritesWidget extends StatelessWidget {
           return ListViewItemWidget(
               product: context
                   .watch<FavoritesModel>()
-                  .getFavoriteProductList()[index]
+                  .getFavoriteProductList()[index],
           );
         },
         itemCount: context

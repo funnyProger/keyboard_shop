@@ -15,10 +15,12 @@ class MainScreenContainerWidget extends StatefulWidget {
 
 class _MainScreenContainerWidgetState extends State<MainScreenContainerWidget> {
   int _currentNavIndex = 0;
+
+
   final List<Widget> _pages = [
     Container(
       padding: const EdgeInsets.all(7),
-      child: const ListWidget(),
+      child: const ListViewWidget(),
     ),
     Container(
       padding: const EdgeInsets.all(7),
@@ -46,6 +48,8 @@ class _MainScreenContainerWidgetState extends State<MainScreenContainerWidget> {
       size: 35,
     )
   ];
+
+
 
 
   @override

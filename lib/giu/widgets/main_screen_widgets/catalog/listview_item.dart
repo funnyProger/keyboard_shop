@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:keyboard_shop/core/models/cart_model.dart';
 import 'package:keyboard_shop/core/models/favorites_model.dart';
+import 'package:keyboard_shop/core/models/current_user_model.dart';
 import 'package:keyboard_shop/data/model_objects/product/base_product.dart';
 import 'package:keyboard_shop/giu/widgets/info_screen_widgets/info_screen_container.dart';
 import 'package:provider/provider.dart';
-
 import 'favorite_icon.dart';
 
 
@@ -73,19 +73,27 @@ class ListViewItemWidget extends StatelessWidget {
                       children: [
                         GestureDetector(
                             onTap: () {
-                              context
-                                  .read<CartModel>()
-                                  .addToCart(
-                                    product.id,
-                                    product.image,
-                                    product.name,
-                                    product.price,
-                                  );
-                              ScaffoldMessenger.of(context)
-                                  .removeCurrentSnackBar();
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(
-                                  getSnackBar('Successfully added'));
+                              if(context.read<CurrentUserModel>().isCurrentUserLoggedIn()) {
+                                context
+                                    .read<CartModel>()
+                                    .addToCart(
+                                  product.id,
+                                  product.image,
+                                  product.name,
+                                  product.price,
+                                );
+                                ScaffoldMessenger.of(context)
+                                    .removeCurrentSnackBar();
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(
+                                    getSnackBar('Successfully added'));
+                              } else {
+                                ScaffoldMessenger.of(context)
+                                    .removeCurrentSnackBar();
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(
+                                    getSnackBar('Please login'));
+                              }
                             },
                             child: Container(
                               padding:
@@ -110,17 +118,25 @@ class ListViewItemWidget extends StatelessWidget {
                           right: 12,
                           child: GestureDetector(
                             onTap: () {
-                              context
-                                  .read<FavoritesModel>()
-                                  .productDistributor(product);
-                              if(context
-                                  .read<FavoritesModel>()
-                                  .isProductContainsInFavorites(product.id)) {
+                              if(context.read<CurrentUserModel>().isCurrentUserLoggedIn()) {
+                                context
+                                    .read<FavoritesModel>()
+                                    .productDistributor(product);
+                                if(context
+                                    .read<FavoritesModel>()
+                                    .isProductContainsInFavorites(product.id)) {
+                                  ScaffoldMessenger.of(context)
+                                      .removeCurrentSnackBar();
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(
+                                      getSnackBar('Successfully added'));
+                                }
+                              } else {
                                 ScaffoldMessenger.of(context)
                                     .removeCurrentSnackBar();
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(
-                                    getSnackBar('Successfully added'));
+                                    getSnackBar('Please login'));
                               }
                             },
                             child: FavoriteIconWidget(id: product.id),

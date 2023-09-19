@@ -4,23 +4,23 @@ import 'package:keyboard_shop/data/controllers/json_controller.dart';
 import 'package:keyboard_shop/data/model_objects/product/product.dart';
 import 'listview_item.dart';
 
-class ListWidget extends StatefulWidget {
-  const ListWidget({super.key});
+class ListViewWidget extends StatefulWidget {
+  const ListViewWidget({super.key});
 
   @override
-  State<ListWidget> createState() => _ListWidgetState();
+  State<ListViewWidget> createState() => _ListViewWidgetState();
 }
 
 
-class _ListWidgetState extends State<ListWidget> {
+class _ListViewWidgetState extends State<ListViewWidget> {
   late Future<List<Product>> _productListFromJson;
   JsonController controller = JsonController();
 
 
   @override
   void initState() {
-    super.initState();
     _productListFromJson = controller.getProductList();
+    super.initState();
   }
 
 

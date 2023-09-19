@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:keyboard_shop/core/models/favorites_model.dart';
+import 'package:keyboard_shop/core/models/current_user_model.dart';
 import 'package:provider/provider.dart';
 
 class FavoriteIconWidget extends StatelessWidget {
@@ -13,12 +14,20 @@ class FavoriteIconWidget extends StatelessWidget {
     context.select<FavoritesModel, bool>((favoriteModelObject) =>
         favoriteModelObject.isProductContainsInFavorites(id));
 
-    if (isAddToFavorites) {
-      return SizedBox(
-          height: 25,
-          width: 25,
-          child: Image.asset('assets/images/favorite_selected.png')
-      );
+    if(context.watch<CurrentUserModel>().isCurrentUserLoggedIn()) {
+      if (isAddToFavorites) {
+        return SizedBox(
+            height: 25,
+            width: 25,
+            child: Image.asset('assets/images/favorite_selected.png')
+        );
+      } else {
+        return SizedBox(
+            height: 25,
+            width: 25,
+            child: Image.asset('assets/images/favorite_not_selected.png')
+        );
+      }
     } else {
       return SizedBox(
           height: 25,
@@ -26,5 +35,6 @@ class FavoriteIconWidget extends StatelessWidget {
           child: Image.asset('assets/images/favorite_not_selected.png')
       );
     }
+
   }
 }

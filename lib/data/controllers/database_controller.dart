@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:keyboard_shop/data/get_data/from_database/get_database_data.dart';
+import 'package:keyboard_shop/data/model_objects/user/new_user.dart';
 
 abstract class GetDataFromDatabaseInterface {
   initDatabase();
@@ -9,6 +10,7 @@ abstract class GetDataFromDatabaseInterface {
   deleteAllDataFromTable(String tableName);
   updateDataInTable(Object object, String tableName);
   getDataBaseTableCount(String tableName);
+  getUserByName(String userName);
 }
 
 
@@ -46,7 +48,11 @@ class DatabaseController {
   }
 
 
-  Future<int> getTableCount(String tableName) {
+  Future<int> getTableCount(String tableName) async {
     return _implementationObject.getDataBaseTableCount(tableName);
+  }
+
+  Future<List<NewUser>> isDBContainUserWithThisName(String userName) async {
+    return _implementationObject.getUserByName(userName);
   }
 }

@@ -23,7 +23,7 @@ class GetDataFromDatabase implements GetDataFromDatabaseInterface {
   Future<Database> initDatabase() async {
     Database database = await openDatabase(
       join(await getDatabasesPath(), 'keyboard_shop.db'),
-      version: 2,
+      version: 1,
       onCreate: (Database db, int version) async {
         await db.execute(
             '''create table if not exists cart (
@@ -154,6 +154,19 @@ class GetDataFromDatabase implements GetDataFromDatabaseInterface {
       return (count = 0);
     } else {
       return count;
+    }
+  }
+
+
+  @override
+  Future<List<NewUser>> getUserByName(String userName) async {
+    final db = await database;
+    String sqlQuery = "select * from users where name = '$userName'";
+    final dataObjects = await db.rawQuery(sqlQuery);
+    if(dataObjects.isEmpty) {
+      return [];
+    } else {
+      return dataObjects.map((user) => NewUser.fromJson(user)).toList();
     }
   }
 }

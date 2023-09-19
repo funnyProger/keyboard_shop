@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:keyboard_shop/core/models/favorites_model.dart';
+import 'package:keyboard_shop/core/models/current_user_model.dart';
 import 'package:keyboard_shop/data/model_objects/cart/cart.dart';
 import 'package:keyboard_shop/data/model_objects/favorite/favorites.dart';
 import 'package:keyboard_shop/giu/widgets/main_screen_widgets/main_screen_container.dart';
@@ -14,11 +15,13 @@ void main() async {
   await Favorites.initList();
 
 
+
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => CartModel()),
         ChangeNotifierProvider(create: (context) => FavoritesModel()),
+        ChangeNotifierProvider(create: (context) => CurrentUserModel()),
       ],
       child: const MyApp(),
     ),
@@ -27,7 +30,7 @@ void main() async {
 
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({super.key, });
 
 
   @override
@@ -40,6 +43,5 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
     );
-
   }
 }

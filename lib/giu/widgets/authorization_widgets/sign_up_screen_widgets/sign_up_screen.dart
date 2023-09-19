@@ -1,17 +1,20 @@
-import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:keyboard_shop/core/models/current_user_model.dart';
 import 'package:keyboard_shop/data/controllers/database_controller.dart';
 import 'package:keyboard_shop/data/controllers/device_storage_controller.dart';
 import 'package:keyboard_shop/data/model_objects/user/new_user.dart';
 import 'package:keyboard_shop/giu/widgets/authorization_widgets/sign_in_screen_widgets/sign_in_screen_container.dart';
 import 'package:keyboard_shop/giu/widgets/main_screen_widgets/catalog/listview_item.dart';
+import 'package:keyboard_shop/giu/widgets/main_screen_widgets/main_screen_container.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:provider/provider.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart' as syspath;
 
 class SignUpScreenWidget extends StatefulWidget {
   const SignUpScreenWidget({super.key});
@@ -27,7 +30,10 @@ class SignUpScreenWidgetState extends State<SignUpScreenWidget> {
   final _formKey = GlobalKey<FormState>();
   final DatabaseController _databaseController = DatabaseController();
   final DeviceStorageController _deviceDataController = DeviceStorageController();
-  Uint8List? _imageFromDevice;
+  XFile? _imageFromDevice;
+  File? _saveImagePath;
+
+
 
   @override
   void dispose() {
@@ -37,15 +43,21 @@ class SignUpScreenWidgetState extends State<SignUpScreenWidget> {
     super.dispose();
   }
 
+
   Future getFileFromDevice() async {
-    Uint8List? returnedImage = await _deviceDataController.getGalleryData();
+    final returnedImage = await _deviceDataController.getGalleryData();
     if(returnedImage != null) {
-      _imageFromDevice = returnedImage;
+      _imageFromDevice = XFile(returnedImage.path);
+
+      /*final appDir = await syspath.getApplicationCacheDirectory();
+      final fileName = path.basename(returnedImage.path);
+      _saveImagePath = File('${appDir.path}/$fileName');*/
     }
     setState(() {
       _imageFromDevice;
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +100,7 @@ class SignUpScreenWidgetState extends State<SignUpScreenWidget> {
                     child: _imageFromDevice != null ? CircleAvatar(
                       backgroundColor: Colors.black54,
                       radius: 100,
-                      backgroundImage: MemoryImage(_imageFromDevice!),
+                      backgroundImage: Image.file(File(_imageFromDevice!.path)).image,
                     ) : CircleAvatar(
                       backgroundColor: Colors.black54,
                       radius: 100,
@@ -199,23 +211,54 @@ class SignUpScreenWidgetState extends State<SignUpScreenWidget> {
                             && _inputPhoneNumberDataController.value.text.isNotEmpty
                             && _inputPasswordDataController.value.text.isNotEmpty
                             && _formKey.currentState!.validate()) {
-                          ScaffoldMessenger.of(context)
-                              .removeCurrentSnackBar();
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(
-                              getSnackBar('Successfully'));
-                          String defaultImage = await rootBundle.loadString('assets/images/default_male_avatar_1.svg');
-                          _databaseController.addDataToTable(
-                              NewUser(
-                                  image: _imageFromDevice == null
-                                      ? defaultImage
-                                      : base64Encode(_imageFromDevice as List<int>),
-                                  name: _inputNameDataController.text,
-                                  phoneNumber: _inputPhoneNumberDataController.text,
-                                  password: _inputPasswordDataController.text
-                              ),
-                              'users'
-                          );
+                          bool checkUserNameInDB = await isThisUserAlreadyExists(_inputNameDataController.value.text);
+                          if(checkUserNameInDB) {
+                            if(context.mounted) {
+                              ScaffoldMessenger.of(context)
+                                  .removeCurrentSnackBar();
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(
+                                  getSnackBar('Successfully'));
+                              _databaseController.addDataToTable(
+                                  NewUser(
+                                      image: _imageFromDevice == null
+                                          ? '1'
+                                          : _imageFromDevice!.path,
+                                      name: _inputNameDataController.text,
+                                      phoneNumber: _inputPhoneNumberDataController.text,
+                                      password: _inputPasswordDataController.text
+                                  ),
+                                  'users'
+                              );
+                              if(context.mounted) {
+                                context.read<CurrentUserModel>().setCurrentUserAndSharedPreferencesData(
+                                  true,
+                                  NewUser(
+                                      image: _imageFromDevice == null
+                                          ? '1'
+                                          : _imageFromDevice!.path,
+                                      name: _inputNameDataController.text,
+                                      phoneNumber: _inputPhoneNumberDataController.text,
+                                      password: _inputPasswordDataController.text
+                                  ),
+                                );
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const MainScreenContainerWidget())
+                                );
+                              }
+                            }
+                          } else {
+                            if(context.mounted) {
+                              ScaffoldMessenger.of(context)
+                                  .removeCurrentSnackBar();
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(
+                                  getSnackBar('Enter another name'));
+                            }
+                          }
+
                         } else {
                           ScaffoldMessenger.of(context)
                               .removeCurrentSnackBar();
@@ -406,6 +449,18 @@ Widget getTextFormFieldPhoneNumberAndPassword(BuildContext context,
       ),
     ],
   );
+}
+
+
+Future<bool> isThisUserAlreadyExists(String userName) async {
+  bool isUserWithThisNameAlreadyExists = true;
+  List<NewUser> list = await DatabaseController().isDBContainUserWithThisName(userName);
+  for(NewUser element in list) {
+    if(element.name == userName) {
+      isUserWithThisNameAlreadyExists = false;
+    }
+  }
+  return isUserWithThisNameAlreadyExists;
 }
 
 
