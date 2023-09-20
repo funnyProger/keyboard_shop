@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:keyboard_shop/core/models/current_user_model.dart';
+import 'package:keyboard_shop/data/controllers/database_controller.dart';
+import 'package:keyboard_shop/data/model_objects/user/new_user.dart';
 import 'package:keyboard_shop/giu/widgets/authorization_widgets/sign_up_screen_widgets/sign_up_screen.dart';
 import 'package:keyboard_shop/giu/widgets/main_screen_widgets/catalog/listview_item.dart';
+import 'package:provider/provider.dart';
 
 class SignInScreenWidget extends StatefulWidget {
   const SignInScreenWidget({super.key});
@@ -78,15 +82,48 @@ class SignInScreenWidgetState extends State<SignInScreenWidget> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     InkWell(
-                      onTap: () {
+                      onTap: () async {
                         if(_inputPhoneNumberDataController.value.text.isNotEmpty
                             && _inputPasswordDataController.value.text.isNotEmpty
                             && _formKey.currentState!.validate()) {
-                          ScaffoldMessenger.of(context)
-                              .removeCurrentSnackBar();
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(
-                              getSnackBar('Successfully'));
+                          Map<int, NewUser> checkUserNameOrPhoneNumberInDB =
+                            await isUserWithThisNameOrPhoneNumberAlreadyExists(
+                            _inputPasswordDataController.value.text,
+                            '+7 ${_inputPhoneNumberDataController.value.text}',
+                          );
+                          if(checkUserNameOrPhoneNumberInDB.keys.contains(0)) {
+                            if(context.mounted) {
+                              context.read<CurrentUserModel>().setCurrentUserAndSharedPreferencesData(
+                                true,
+                                NewUser(
+                                    name: checkUserNameOrPhoneNumberInDB[0]!.name,
+                                    phoneNumber: checkUserNameOrPhoneNumberInDB[0]!.phoneNumber,
+                                    password: checkUserNameOrPhoneNumberInDB[0]!.password
+                                ),
+                              );
+                              ScaffoldMessenger.of(context)
+                                  .removeCurrentSnackBar();
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(
+                                  getSnackBar('Successfully'));
+                              Navigator.pushNamedAndRemoveUntil(context, 'main', (route) => false);                            }
+                          } else if(checkUserNameOrPhoneNumberInDB.keys.contains(1)) {
+                            if(context.mounted) {
+                              ScaffoldMessenger.of(context)
+                                  .removeCurrentSnackBar();
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(
+                                  getSnackBar('Incorrect password'));
+                            }
+                          } else if(checkUserNameOrPhoneNumberInDB.keys.contains(2)) {
+                            if(context.mounted) {
+                              ScaffoldMessenger.of(context)
+                                  .removeCurrentSnackBar();
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(
+                                  getSnackBar('Incorrect phone number'));
+                            }
+                          }
                         } else {
                           ScaffoldMessenger.of(context)
                               .removeCurrentSnackBar();
@@ -126,4 +163,25 @@ class SignInScreenWidgetState extends State<SignInScreenWidget> {
       )
     );
   }
+}
+
+
+Future<Map<int, NewUser>> isUserWithThisNameOrPhoneNumberAlreadyExists(String password, String phoneNumber) async {
+  Map<int, NewUser> isUserWithThisNameOrPhoneNumberAlreadyExists = {};
+  List<NewUser> list = await DatabaseController().isDBContainUserWithThisPasswordOrPhoneNumber(password, phoneNumber);
+  for(NewUser element in list) {
+    if(element.phoneNumber == phoneNumber && element.password == password) {
+      isUserWithThisNameOrPhoneNumberAlreadyExists[0] = element;
+      return isUserWithThisNameOrPhoneNumberAlreadyExists;
+    }
+    if(element.phoneNumber == phoneNumber && element.password != password) {
+      isUserWithThisNameOrPhoneNumberAlreadyExists[1] = element;
+      return isUserWithThisNameOrPhoneNumberAlreadyExists;
+    }
+    if(element.phoneNumber != phoneNumber && element.password == password) {
+      isUserWithThisNameOrPhoneNumberAlreadyExists[2] = element;
+      return isUserWithThisNameOrPhoneNumberAlreadyExists;
+    }
+  }
+  return isUserWithThisNameOrPhoneNumberAlreadyExists;
 }

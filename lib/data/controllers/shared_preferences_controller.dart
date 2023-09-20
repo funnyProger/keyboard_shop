@@ -7,6 +7,7 @@ abstract class SharedPreferencesControllerInterface {
   getCurrentUserData();
 }
 
+
 class SharedPreferencesController {
   final SharedPreferencesControllerInterface _implementationObject = SharedPreferencesData();
 
@@ -15,12 +16,12 @@ class SharedPreferencesController {
   }
 
 
-  Future<bool> readIsLoggedInData() {
+  Future<bool> readIsLoggedInData() async {
     return _implementationObject.getIsLoggedInData();
   }
 
 
-  Future<List<NewUser>> readCurrentUserDataFromSharedPreferences() {
+  Future<NewUser> readCurrentUserDataFromSharedPreferences() async {
     return _implementationObject.getCurrentUserData();
   }
 }

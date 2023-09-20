@@ -10,7 +10,8 @@ abstract class GetDataFromDatabaseInterface {
   deleteAllDataFromTable(String tableName);
   updateDataInTable(Object object, String tableName);
   getDataBaseTableCount(String tableName);
-  getUserByName(String userName);
+  getUserByNameOrPhoneNumber(String userName, String phoneNumber);
+  getUserByPasswordAndPhoneNumber(String userName, String phoneNumber);
 }
 
 
@@ -52,7 +53,13 @@ class DatabaseController {
     return _implementationObject.getDataBaseTableCount(tableName);
   }
 
-  Future<List<NewUser>> isDBContainUserWithThisName(String userName) async {
-    return _implementationObject.getUserByName(userName);
+
+  Future<List<NewUser>> isDBContainUserWithThisNameOrPhoneNumber(String userName, String phoneNumber) async {
+    return _implementationObject.getUserByNameOrPhoneNumber(userName, phoneNumber);
+  }
+
+
+  Future<List<NewUser>> isDBContainUserWithThisPasswordOrPhoneNumber(String password, String phoneNumber) async {
+    return _implementationObject.getUserByPasswordAndPhoneNumber(password, phoneNumber);
   }
 }

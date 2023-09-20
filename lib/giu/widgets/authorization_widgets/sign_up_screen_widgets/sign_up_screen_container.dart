@@ -17,7 +17,12 @@ class SignUpScreenContainerWidget extends StatelessWidget {
           textDirection: TextDirection.ltr,
         ),
       ),
-      body: const SignUpScreenWidget(),
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: const SignUpScreenWidget(),
+      ),
     );
   }
 }

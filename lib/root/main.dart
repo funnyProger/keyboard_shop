@@ -29,18 +29,32 @@ void main() async {
 }
 
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key, });
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+
+  @override
+  State<MyApp> createState() => MyAppState();
+}
+
+
+class MyAppState extends State<MyApp> {
+
+  @override
+  void initState() {
+    context.read<CurrentUserModel>().initAndCheckSharedPreferencesData();
+    super.initState();
+  }
 
 
   @override
   Widget build(BuildContext context) {
 
-    return const MaterialApp(
-      home: DefaultTabController(
-          length: 2,
-          child: MainScreenContainerWidget(),
-      ),
+    return MaterialApp(
+      home: const MainScreenContainerWidget(),
+      routes: <String, WidgetBuilder> {
+        'main': (BuildContext context) => const MainScreenContainerWidget()
+      },
       debugShowCheckedModeBanner: false,
     );
   }

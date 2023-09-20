@@ -1,20 +1,13 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:keyboard_shop/core/models/current_user_model.dart';
 import 'package:keyboard_shop/data/controllers/database_controller.dart';
-import 'package:keyboard_shop/data/controllers/device_storage_controller.dart';
 import 'package:keyboard_shop/data/model_objects/user/new_user.dart';
 import 'package:keyboard_shop/giu/widgets/authorization_widgets/sign_in_screen_widgets/sign_in_screen_container.dart';
 import 'package:keyboard_shop/giu/widgets/main_screen_widgets/catalog/listview_item.dart';
-import 'package:keyboard_shop/giu/widgets/main_screen_widgets/main_screen_container.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
-import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart' as syspath;
 
 class SignUpScreenWidget extends StatefulWidget {
   const SignUpScreenWidget({super.key});
@@ -29,10 +22,6 @@ class SignUpScreenWidgetState extends State<SignUpScreenWidget> {
   final _inputPasswordDataController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final DatabaseController _databaseController = DatabaseController();
-  final DeviceStorageController _deviceDataController = DeviceStorageController();
-  XFile? _imageFromDevice;
-  File? _saveImagePath;
-
 
 
   @override
@@ -41,21 +30,6 @@ class SignUpScreenWidgetState extends State<SignUpScreenWidget> {
     _inputPhoneNumberDataController.dispose();
     _inputPasswordDataController.dispose();
     super.dispose();
-  }
-
-
-  Future getFileFromDevice() async {
-    final returnedImage = await _deviceDataController.getGalleryData();
-    if(returnedImage != null) {
-      _imageFromDevice = XFile(returnedImage.path);
-
-      /*final appDir = await syspath.getApplicationCacheDirectory();
-      final fileName = path.basename(returnedImage.path);
-      _saveImagePath = File('${appDir.path}/$fileName');*/
-    }
-    setState(() {
-      _imageFromDevice;
-    });
   }
 
 
@@ -94,14 +68,7 @@ class SignUpScreenWidgetState extends State<SignUpScreenWidget> {
                   alignment: Alignment.center,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(100),
-                    onTap: () async {
-                      getFileFromDevice();
-                    },
-                    child: _imageFromDevice != null ? CircleAvatar(
-                      backgroundColor: Colors.black54,
-                      radius: 100,
-                      backgroundImage: Image.file(File(_imageFromDevice!.path)).image,
-                    ) : CircleAvatar(
+                    child: CircleAvatar(
                       backgroundColor: Colors.black54,
                       radius: 100,
                       child: SvgPicture.asset('assets/images/default_male_avatar_1.svg'),
@@ -211,8 +178,11 @@ class SignUpScreenWidgetState extends State<SignUpScreenWidget> {
                             && _inputPhoneNumberDataController.value.text.isNotEmpty
                             && _inputPasswordDataController.value.text.isNotEmpty
                             && _formKey.currentState!.validate()) {
-                          bool checkUserNameInDB = await isThisUserAlreadyExists(_inputNameDataController.value.text);
-                          if(checkUserNameInDB) {
+                          int checkUserNameOrPhoneNumberInDB = await isUserWithThisNameOrPhoneNumberAlreadyExists(
+                            _inputNameDataController.value.text,
+                            '+7 ${_inputPhoneNumberDataController.value.text}',
+                          );
+                          if(checkUserNameOrPhoneNumberInDB == 0) {
                             if(context.mounted) {
                               ScaffoldMessenger.of(context)
                                   .removeCurrentSnackBar();
@@ -221,11 +191,8 @@ class SignUpScreenWidgetState extends State<SignUpScreenWidget> {
                                   getSnackBar('Successfully'));
                               _databaseController.addDataToTable(
                                   NewUser(
-                                      image: _imageFromDevice == null
-                                          ? '1'
-                                          : _imageFromDevice!.path,
                                       name: _inputNameDataController.text,
-                                      phoneNumber: _inputPhoneNumberDataController.text,
+                                      phoneNumber: '+7 ${_inputPhoneNumberDataController.text}',
                                       password: _inputPasswordDataController.text
                                   ),
                                   'users'
@@ -234,28 +201,29 @@ class SignUpScreenWidgetState extends State<SignUpScreenWidget> {
                                 context.read<CurrentUserModel>().setCurrentUserAndSharedPreferencesData(
                                   true,
                                   NewUser(
-                                      image: _imageFromDevice == null
-                                          ? '1'
-                                          : _imageFromDevice!.path,
                                       name: _inputNameDataController.text,
-                                      phoneNumber: _inputPhoneNumberDataController.text,
+                                      phoneNumber: '+7 ${_inputPhoneNumberDataController.text}',
                                       password: _inputPasswordDataController.text
                                   ),
                                 );
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const MainScreenContainerWidget())
-                                );
+                                Navigator.pushNamedAndRemoveUntil(context, 'main', (route) => false);
                               }
                             }
-                          } else {
+                          } else if(checkUserNameOrPhoneNumberInDB == 1) {
                             if(context.mounted) {
                               ScaffoldMessenger.of(context)
                                   .removeCurrentSnackBar();
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(
-                                  getSnackBar('Enter another name'));
+                                  getSnackBar('Name is already in use'));
+                            }
+                          } else if(checkUserNameOrPhoneNumberInDB == 2) {
+                            if(context.mounted) {
+                              ScaffoldMessenger.of(context)
+                                  .removeCurrentSnackBar();
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(
+                                  getSnackBar('Phone is already in use'));
                             }
                           }
 
@@ -331,20 +299,11 @@ Widget getTextFormFieldPhoneNumberAndPassword(BuildContext context,
             padding: const EdgeInsets.only(left: 60, right: 60),
             child: Container(
                 padding: const EdgeInsets.only(left: 10, right: 10),
-                child: IntlPhoneField(
+                child: TextFormField(
                   inputFormatters: [getPhoneNumberMaskFormatter()],
                   controller: inputPhoneNumberDataController,
                   keyboardType: TextInputType.phone,
-                  initialCountryCode: 'RU',
                   cursorColor: Colors.white,
-                  dropdownIcon: const Icon(
-                    Icons.arrow_drop_down,
-                    color: Colors.white,
-                  ),
-                  dropdownTextStyle: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 17
-                  ),
                   style: const TextStyle(
                       color: Colors.white,
                       fontSize: 17
@@ -352,6 +311,15 @@ Widget getTextFormFieldPhoneNumberAndPassword(BuildContext context,
                   decoration:  InputDecoration(
                     counterText: '',
                     labelText: 'Phone number',
+                    prefixIcon: const Icon(
+                      Icons.phone_android,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                    prefixText: '+7 ',
+                    prefixStyle: const TextStyle(
+                      color: Colors.white
+                    ),
                     floatingLabelAlignment: FloatingLabelAlignment.center,
                     labelStyle: const TextStyle(color: Colors.grey),
                     floatingLabelStyle: MaterialStateTextStyle
@@ -452,20 +420,28 @@ Widget getTextFormFieldPhoneNumberAndPassword(BuildContext context,
 }
 
 
-Future<bool> isThisUserAlreadyExists(String userName) async {
-  bool isUserWithThisNameAlreadyExists = true;
-  List<NewUser> list = await DatabaseController().isDBContainUserWithThisName(userName);
+Future<int> isUserWithThisNameOrPhoneNumberAlreadyExists(String userName, String phoneNumber) async {
+  int isUserWithThisNameOrPhoneNumberAlreadyExists = 0;
+  List<NewUser> list = await DatabaseController().isDBContainUserWithThisNameOrPhoneNumber(userName, phoneNumber);
   for(NewUser element in list) {
     if(element.name == userName) {
-      isUserWithThisNameAlreadyExists = false;
+      isUserWithThisNameOrPhoneNumberAlreadyExists = 1;
+      return isUserWithThisNameOrPhoneNumberAlreadyExists;
     }
+    if(element.phoneNumber == phoneNumber) {
+      isUserWithThisNameOrPhoneNumberAlreadyExists = 2;
+      return isUserWithThisNameOrPhoneNumberAlreadyExists;
+    }
+
   }
-  return isUserWithThisNameAlreadyExists;
+  return isUserWithThisNameOrPhoneNumberAlreadyExists;
 }
+
 
 
 MaskTextInputFormatter getPhoneNumberMaskFormatter() {
   return MaskTextInputFormatter(
+    mask: '(___) ___-__-__',
     filter: {'_': RegExp('[0-9]')},
     type: MaskAutoCompletionType.lazy,
   );

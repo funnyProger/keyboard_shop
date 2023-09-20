@@ -46,7 +46,6 @@ class GetDataFromDatabase implements GetDataFromDatabaseInterface {
         await db.execute(
             '''create table if not exists users (
               id integer primary key autoincrement, 
-              image text,
               name text,
               phoneNumber text,
               password text
@@ -159,9 +158,22 @@ class GetDataFromDatabase implements GetDataFromDatabaseInterface {
 
 
   @override
-  Future<List<NewUser>> getUserByName(String userName) async {
+  Future<List<NewUser>> getUserByNameOrPhoneNumber(String userName, String phoneNumber) async {
     final db = await database;
-    String sqlQuery = "select * from users where name = '$userName'";
+    String sqlQuery = "select * from users where phoneNumber = '$phoneNumber' or name = '$userName'";
+    final dataObjects = await db.rawQuery(sqlQuery);
+    if(dataObjects.isEmpty) {
+      return [];
+    } else {
+      return dataObjects.map((user) => NewUser.fromJson(user)).toList();
+    }
+  }
+
+
+  @override
+  Future<List<NewUser>> getUserByPasswordAndPhoneNumber(String userName, String phoneNumber) async {
+    final db = await database;
+    String sqlQuery = "select * from users where phoneNumber = '$phoneNumber' or password = '$userName'";
     final dataObjects = await db.rawQuery(sqlQuery);
     if(dataObjects.isEmpty) {
       return [];

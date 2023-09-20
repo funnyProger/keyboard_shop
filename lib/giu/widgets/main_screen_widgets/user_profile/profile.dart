@@ -97,19 +97,19 @@ class UserProfileWidget extends StatelessWidget {
           flex: 10,
           child: CircleAvatar(
               backgroundColor: Colors.black54,
-              radius: 100,
-              child: context.read<CurrentUserModel>().getCurrentUserImage() == '1' ? SvgPicture.asset(
+              radius: 110,
+              child: SvgPicture.asset(
                 'assets/images/default_female_avatar_1.svg',
                 height: 300,
                 width: 300,
-              ) : Image.asset(context.read<CurrentUserModel>().getCurrentUserImage())
+              )
           ),
         ),
         Expanded(
           flex: 5,
           child: Container(
             padding: const EdgeInsets.only(left: 15, top: 10, right: 15, bottom: 10),
-            alignment: Alignment.center,
+            alignment: Alignment.bottomCenter,
             child: Text(
               'Phone number: ${context.read<CurrentUserModel>().getCurrentUserPhoneNumber()}',
               style: const TextStyle(
@@ -126,7 +126,7 @@ class UserProfileWidget extends StatelessWidget {
           flex: 5,
           child: Container(
             padding: const EdgeInsets.only(left: 15, top: 10, right: 15, bottom: 10),
-            alignment: Alignment.center,
+            alignment: Alignment.topCenter,
             child: Text(
               'Name: ${context.read<CurrentUserModel>().getCurrentUserName()}',
               style: const TextStyle(
@@ -141,7 +141,7 @@ class UserProfileWidget extends StatelessWidget {
         ),
 
         Expanded(
-            flex: 5,
+            flex: 7,
             child: Container(
                 alignment: Alignment.center,
                 child: GestureDetector(
@@ -150,10 +150,9 @@ class UserProfileWidget extends StatelessWidget {
                         .setCurrentUserAndSharedPreferencesData(
                         false,
                         NewUser(
-                            image: 'assets/images/default_female_avatar_1.svg',
-                            name: 'User',
-                            phoneNumber: '^.^',
-                            password: 'T_T',
+                            name: '',
+                            phoneNumber: '',
+                            password: '',
                         )
                     );
                   },

@@ -169,7 +169,7 @@ SnackBar getSnackBar(String snackBarMessage) {
       borderRadius: BorderRadius.all(Radius.circular(100)),
     ),
     backgroundColor: Colors.black87,
-    margin: const EdgeInsets.only(left: 120, right: 120, bottom: 30),
+    margin: const EdgeInsets.only(left: 110, right: 110, bottom: 30),
   );
 
   return snackBar;
