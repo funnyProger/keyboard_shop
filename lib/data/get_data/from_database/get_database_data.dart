@@ -1,6 +1,9 @@
+import 'package:keyboard_shop/constants/constants.dart';
 import 'package:keyboard_shop/data/controllers/database_controller.dart';
 import 'package:keyboard_shop/data/model_objects/cart/cart_product.dart';
+import 'package:keyboard_shop/data/model_objects/database/database_entity.dart';
 import 'package:keyboard_shop/data/model_objects/favorite/favorite_product.dart';
+import 'package:keyboard_shop/data/model_objects/product/base_product.dart';
 import 'package:keyboard_shop/data/model_objects/user/new_user.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -23,46 +26,15 @@ class GetDataFromDatabase implements GetDataFromDatabaseInterface {
   Future<Database> initDatabase() async {
     Database database = await openDatabase(
       join(await getDatabasesPath(), 'keyboard_shop.db'),
-      version: 1,
+      version: 2,
       onCreate: (Database db, int version) async {
-        await db.execute(
-            '''create table if not exists cart (
-            id integer primary key, 
-            image text,
-            name text,
-            price integer,
-            count integer
-            )'''
-        );
-        await db.execute(
-            '''create table if not exists favorites (
-            id integer primary key, 
-            image text,
-            name text,
-            price integer,
-            description text
-            )'''
-        );
-        await db.execute(
-            '''create table if not exists users (
-              id integer primary key autoincrement, 
-              name text,
-              phoneNumber text,
-              password text
-              )'''
-        );
+        await db.execute(Constants.createCartTableSQL);
+        await db.execute(Constants.createFavoritesTableSQL);
+        await db.execute(Constants.createUsersTableSQL);
       },
       onUpgrade: (Database db, int oldVersion, int newVersion) async {
-        if(oldVersion < newVersion) {
-          await db.execute(
-              '''create table if not exists users (
-              id integer primary key autoincrement, 
-              image text,
-              name text,
-              phoneNumber text,
-              password text
-              )'''
-          );
+        if(oldVersion < 2) {
+          await db.execute(Constants.createUsersTableSQL);
         }
       },
     );
@@ -71,21 +43,11 @@ class GetDataFromDatabase implements GetDataFromDatabaseInterface {
 
 
   @override
-  Future<void> insetIntoTable(Object object, String tableName) async {
-    var dataObject;
-
-    if(tableName == 'cart') {
-      dataObject = object as CartProduct;
-    } else if(tableName == 'favorites') {
-      dataObject = object as FavoriteProduct;
-    } else if(tableName == 'users') {
-      dataObject = object as NewUser;
-    }
-
+  Future<void> insetIntoTable(DbEntity object, String tableName) async {
     final db = await database;
     await db.insert(
       tableName,
-      dataObject.toJson(),
+      object.toJson(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
@@ -123,23 +85,13 @@ class GetDataFromDatabase implements GetDataFromDatabaseInterface {
 
 
   @override
-  Future<void> updateDataInTable(Object object, String tableName) async {
-    var dataObject;
-
-    if(tableName == 'cart') {
-      dataObject = object as CartProduct;
-    } else if(tableName == 'favorites') {
-      dataObject = object as FavoriteProduct;
-    } else if(tableName == 'users') {
-      dataObject = object as NewUser;
-    }
-
+  Future<void> updateDataInTableById(BaseProduct object, String tableName) async {
     final db = await database;
     await db.update(
         tableName,
-        dataObject.toJson(),
+        object.toJson(),
         where: 'id = ?',
-        whereArgs: [dataObject.id]
+        whereArgs: [object.id]
     );
   }
 
@@ -148,12 +100,7 @@ class GetDataFromDatabase implements GetDataFromDatabaseInterface {
   Future<int> getDataBaseTableCount(String tableName) async {
     final db = await database;
     int? count = Sqflite.firstIntValue(await db.rawQuery('select sum(count) from $tableName'));
-
-    if(count == null) {
-      return (count = 0);
-    } else {
-      return count;
-    }
+    return  count ?? 0;
   }
 
 
@@ -162,23 +109,18 @@ class GetDataFromDatabase implements GetDataFromDatabaseInterface {
     final db = await database;
     String sqlQuery = "select * from users where phoneNumber = '$phoneNumber' or name = '$userName'";
     final dataObjects = await db.rawQuery(sqlQuery);
-    if(dataObjects.isEmpty) {
-      return [];
-    } else {
-      return dataObjects.map((user) => NewUser.fromJson(user)).toList();
-    }
+
+    return dataObjects.map((user) => NewUser.fromJson(user)).toList();
   }
 
 
   @override
-  Future<List<NewUser>> getUserByPasswordAndPhoneNumber(String userName, String phoneNumber) async {
+  Future<NewUser?> getUserByPasswordAndPhoneNumber(String password, String phoneNumber) async {
     final db = await database;
-    String sqlQuery = "select * from users where phoneNumber = '$phoneNumber' or password = '$userName'";
+    String sqlQuery = "select * from users where phoneNumber = '$phoneNumber' and password = '$password'";
     final dataObjects = await db.rawQuery(sqlQuery);
-    if(dataObjects.isEmpty) {
-      return [];
-    } else {
-      return dataObjects.map((user) => NewUser.fromJson(user)).toList();
-    }
+    List<NewUser> list = dataObjects.map((user) => NewUser.fromJson(user)).toList();
+    NewUser? userData = list.isEmpty ? null : list.single;
+    return userData;
   }
 }

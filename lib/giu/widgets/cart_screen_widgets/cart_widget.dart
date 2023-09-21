@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:keyboard_shop/core/models/cart_model.dart';
+import 'package:keyboard_shop/core/models/current_user_model.dart';
 import 'package:keyboard_shop/data/model_objects/cart/cart_product.dart';
 import 'package:keyboard_shop/giu/widgets/main_screen_widgets/catalog/listview_item.dart';
 import 'package:provider/provider.dart';
@@ -10,59 +11,66 @@ class CartWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    if (context.watch<CartModel>().isCartEmpty()) {
+    if (context.watch<CurrentUserModel>().isCurrentUserLoggedIn()) {
+      if (context.watch<CartModel>().isCartEmpty()) {
+        return const Center(
+          child: Text("Empty",
+              style: TextStyle(fontSize: 17, color: Colors.white54),
+              textDirection: TextDirection.ltr),
+        );
+      } else {
+        return Stack(
+          children: [
+            ListView.builder(
+                itemCount: context
+                    .read<CartModel>()
+                    .getCartList()
+                    .length + 1,
+                itemBuilder: (context, index) {
+                  return listViewBuilder(
+                    context,
+                    index,
+                    context.watch<CartModel>().getCartList(),
+                  );
+                }
+            ),
+            Container(
+                alignment: Alignment.bottomCenter,
+                child: GestureDetector(
+                  onTap: () {
+                    context.read<CartModel>().buy();
+                    showSnackBar(context, 'Successfully paid');
+                  },
+                  child: Container(
+                    height: 50,
+                    width: 250,
+                    alignment: Alignment.center,
+                    margin: const EdgeInsets.only(top: 15, bottom: 15),
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    child: const Text(
+                      "Buy",
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                      ),
+                      textDirection: TextDirection.ltr,
+                    ),
+                  ),
+                )
+            )
+          ],
+        );
+      }
+    } else {
       return const Center(
-        child: Text("Cart is empty",
+        child: Text("Empty",
             style: TextStyle(fontSize: 17, color: Colors.white54),
             textDirection: TextDirection.ltr),
       );
-    } else {
-      return Stack(
-        children: [
-          ListView.builder(
-              itemCount: context.read<CartModel>().getCartList().length + 1,
-              itemBuilder: (context, index) {
-                return listViewBuilder(
-                  context,
-                  index,
-                  context.watch<CartModel>().getCartList(),
-                );
-              }
-              ),
-          Container(
-              alignment: Alignment.bottomCenter,
-              child: GestureDetector(
-                onTap: () {
-                  context.read<CartModel>().buy();
-                  ScaffoldMessenger.of(context).removeCurrentSnackBar();
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(getSnackBar('Successfully paid'));
-                },
-                child: Container(
-                  height: 50,
-                  width: 250,
-                  alignment: Alignment.center,
-                  margin: const EdgeInsets.only(top: 15, bottom: 15),
-                  decoration: BoxDecoration(
-                    color: Colors.green,
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  child: const Text(
-                    "Buy",
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white,
-                    ),
-                    textDirection: TextDirection.ltr,
-                  ),
-                ),
-              )
-          )
-        ],
-      );
     }
-
   }
 
 

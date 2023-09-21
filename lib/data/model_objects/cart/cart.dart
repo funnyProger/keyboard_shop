@@ -33,7 +33,7 @@ class Cart {
       for (int i = 0; i < _productList.length; i++) {
         if (cartProduct.id == _productList[i].id) {
           _productList[i].count++;
-          controller.updateTableData(_productList[i], 'cart');
+          controller.updateTableDataById(_productList[i], 'cart');
           isNotContainsCartProduct = false;
           return;
         }
@@ -60,7 +60,7 @@ class Cart {
           return;
         } else {
           _productList[i].count--;
-          controller.updateTableData(_productList[i], 'cart');
+          controller.updateTableDataById(_productList[i], 'cart');
         }
         getPrice();
         return;

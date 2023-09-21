@@ -1,8 +1,16 @@
-class CartProduct {
-  final int id;
-  final String image;
-  final String name;
-  final int price;
+import 'package:keyboard_shop/data/model_objects/product/base_product.dart';
+
+class CartProduct implements BaseProduct {
+  @override
+  int id;
+  @override
+  String image;
+  @override
+  String name;
+  @override
+  int price;
+  @override
+  String description = '';
   int count;
 
 
@@ -26,6 +34,7 @@ class CartProduct {
   }
 
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'id': id,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:keyboard_shop/constants/constants.dart';
 import 'package:keyboard_shop/core/models/current_user_model.dart';
 import 'package:keyboard_shop/data/controllers/database_controller.dart';
 import 'package:keyboard_shop/data/model_objects/user/new_user.dart';
@@ -43,120 +44,96 @@ class SignInScreenWidgetState extends State<SignInScreenWidget> {
         key: _formKey,
         child: Column(
           children: [
-            Expanded(
-                flex: 5,
-                child: Container(
-                  alignment: Alignment.center,
-                  child: const Text(
-                    "Log In",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 30,
-                    ),
-                    textDirection: TextDirection.ltr,
-                  ),
+            Container(
+              height: 85,
+              alignment: Alignment.center,
+              child: const Text(
+                "Log In",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 30,
+                ),
+                textDirection: TextDirection.ltr,
+              ),
+            ),
+            Container(
+                height: 200,
+                alignment: Alignment.topCenter,
+                child: CircleAvatar(
+                  backgroundColor: Colors.black54,
+                  radius: 100,
+                  child: SvgPicture.asset('assets/images/default_male_avatar_2.svg'),
                 )
             ),
-            Expanded(
-                flex: 15,
-                child: Container(
-                  alignment: Alignment.topCenter,
-                  child: CircleAvatar(
-                    backgroundColor: Colors.black54,
-                    radius: 100,
-                    child: SvgPicture.asset('assets/images/default_male_avatar_2.svg'),
-                  )
-                )
-            ),
-            Expanded(
-              flex: 9,
+            Container(
+              margin: const EdgeInsets.only(top: 80, bottom: 110),
               child: getTextFormFieldPhoneNumberAndPassword(
                 context,
                 _inputPhoneNumberDataController,
                 _inputPasswordDataController,
               ),
             ),
-            Expanded(
-                flex: 7,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    InkWell(
-                      onTap: () async {
-                        if(_inputPhoneNumberDataController.value.text.isNotEmpty
-                            && _inputPasswordDataController.value.text.isNotEmpty
-                            && _formKey.currentState!.validate()) {
-                          Map<int, NewUser> checkUserNameOrPhoneNumberInDB =
-                            await isUserWithThisNameOrPhoneNumberAlreadyExists(
-                            _inputPasswordDataController.value.text,
-                            '+7 ${_inputPhoneNumberDataController.value.text}',
-                          );
-                          if(checkUserNameOrPhoneNumberInDB.keys.contains(0)) {
-                            if(context.mounted) {
-                              context.read<CurrentUserModel>().setCurrentUserAndSharedPreferencesData(
-                                true,
-                                NewUser(
-                                    name: checkUserNameOrPhoneNumberInDB[0]!.name,
-                                    phoneNumber: checkUserNameOrPhoneNumberInDB[0]!.phoneNumber,
-                                    password: checkUserNameOrPhoneNumberInDB[0]!.password
-                                ),
-                              );
-                              ScaffoldMessenger.of(context)
-                                  .removeCurrentSnackBar();
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(
-                                  getSnackBar('Successfully'));
-                              Navigator.pushNamedAndRemoveUntil(context, 'main', (route) => false);                            }
-                          } else if(checkUserNameOrPhoneNumberInDB.keys.contains(1)) {
-                            if(context.mounted) {
-                              ScaffoldMessenger.of(context)
-                                  .removeCurrentSnackBar();
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(
-                                  getSnackBar('Incorrect password'));
-                            }
-                          } else if(checkUserNameOrPhoneNumberInDB.keys.contains(2)) {
-                            if(context.mounted) {
-                              ScaffoldMessenger.of(context)
-                                  .removeCurrentSnackBar();
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(
-                                  getSnackBar('Incorrect phone number'));
-                            }
+            Container(
+              padding: const EdgeInsets.only(bottom: 47),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  InkWell(
+                    onTap: () async {
+                      if(_inputPhoneNumberDataController.value.text.isNotEmpty
+                          && _inputPasswordDataController.value.text.isNotEmpty
+                          && _formKey.currentState!.validate()) {
+                        ({int queryKeyResult, NewUser userDataFromDb}) checkUserNameOrPhoneNumberInDB =
+                        await checkEnteredDataInDatabase(
+                          _inputPasswordDataController.value.text,
+                          '+7 ${_inputPhoneNumberDataController.value.text}',
+                        );
+                        if(checkUserNameOrPhoneNumberInDB.queryKeyResult == Constants.successLogin) {
+                          if(context.mounted) {
+                            context.read<CurrentUserModel>().setCurrentUserAndSharedPreferencesData(
+                              true,
+                              NewUser(
+                                  name: checkUserNameOrPhoneNumberInDB.userDataFromDb.name,
+                                  phoneNumber: checkUserNameOrPhoneNumberInDB.userDataFromDb.phoneNumber,
+                                  password: checkUserNameOrPhoneNumberInDB.userDataFromDb.password
+                              ),
+                            );
+                            showSnackBar(context, 'Successfully');
+                            Navigator.pushNamedAndRemoveUntil(context, 'main', (route) => false);                            }
+                        } else if(checkUserNameOrPhoneNumberInDB.queryKeyResult == Constants.errorLogin) {
+                          if(context.mounted) {
+                            showSnackBar(context, 'Incorrect phone number or password');
                           }
-                        } else {
-                          ScaffoldMessenger.of(context)
-                              .removeCurrentSnackBar();
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(
-                              getSnackBar('Enter valid data'));
                         }
-                      },
-                      borderRadius: BorderRadius.circular(50),
-                      splashColor: Colors.black,
-                      child: Container(
-                        height: 45,
-                        width: 200,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.grey,
-                          ),
-                          borderRadius: BorderRadius.circular(50),
-                          color: Colors.green,
+                      } else {
+                        showSnackBar(context, 'Enter valid data');
+                      }
+                    },
+                    borderRadius: BorderRadius.circular(50),
+                    splashColor: Colors.black,
+                    child: Container(
+                      height: 45,
+                      width: 200,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.grey,
                         ),
-                        child: const Text(
-                          'Sign In',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                          ),
-                          textDirection: TextDirection.ltr,
+                        borderRadius: BorderRadius.circular(50),
+                        color: Colors.green,
+                      ),
+                      child: const Text(
+                        'Sign In',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
                         ),
+                        textDirection: TextDirection.ltr,
                       ),
                     ),
-                  ],
-                )
+                  ),
+                ],
+              ),
             )
           ],
         ),
@@ -166,22 +143,16 @@ class SignInScreenWidgetState extends State<SignInScreenWidget> {
 }
 
 
-Future<Map<int, NewUser>> isUserWithThisNameOrPhoneNumberAlreadyExists(String password, String phoneNumber) async {
-  Map<int, NewUser> isUserWithThisNameOrPhoneNumberAlreadyExists = {};
-  List<NewUser> list = await DatabaseController().isDBContainUserWithThisPasswordOrPhoneNumber(password, phoneNumber);
-  for(NewUser element in list) {
-    if(element.phoneNumber == phoneNumber && element.password == password) {
-      isUserWithThisNameOrPhoneNumberAlreadyExists[0] = element;
-      return isUserWithThisNameOrPhoneNumberAlreadyExists;
-    }
-    if(element.phoneNumber == phoneNumber && element.password != password) {
-      isUserWithThisNameOrPhoneNumberAlreadyExists[1] = element;
-      return isUserWithThisNameOrPhoneNumberAlreadyExists;
-    }
-    if(element.phoneNumber != phoneNumber && element.password == password) {
-      isUserWithThisNameOrPhoneNumberAlreadyExists[2] = element;
-      return isUserWithThisNameOrPhoneNumberAlreadyExists;
-    }
+Future<({int queryKeyResult, NewUser userDataFromDb})> checkEnteredDataInDatabase(String password, String phoneNumber) async {
+  ({int queryKeyResult, NewUser userDataFromDb})  databaseQueryResult =
+        (queryKeyResult: Constants.errorLogin, userDataFromDb: NewUser(
+            name: '', phoneNumber: '', password: ''));
+
+  NewUser? userData =
+      await DatabaseController().isDBContainUserWithThisPasswordAndPhoneNumber(password, phoneNumber);
+  if(userData != null) {
+    databaseQueryResult = (queryKeyResult: Constants.successLogin, userDataFromDb: userData);
   }
-  return isUserWithThisNameOrPhoneNumberAlreadyExists;
+
+  return databaseQueryResult;
 }

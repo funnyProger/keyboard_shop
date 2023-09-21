@@ -9,7 +9,7 @@ class SignInScreenContainerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       backgroundColor: const Color.fromARGB(255, 24, 24, 24),
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -23,7 +23,9 @@ class SignInScreenContainerWidget extends StatelessWidget {
         onTap: () {
           FocusScope.of(context).unfocus();
         },
-        child: const SignInScreenWidget(),
+        child: const SingleChildScrollView(
+          child: SignInScreenWidget(),
+        ),
       ),
     );
   }

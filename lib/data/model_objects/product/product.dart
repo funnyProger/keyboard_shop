@@ -1,13 +1,23 @@
 import 'base_product.dart';
 
-class Product extends BaseProduct{
+class Product implements BaseProduct {
+  @override
+  String description;
+  @override
+  int id;
+  @override
+  String image;
+  @override
+  String name;
+  @override
+  int price;
 
   Product({
-    required super.id,
-    required super.image,
-    required super.name,
-    required super.price,
-    required super.description,
+    required this.id,
+    required this.image,
+    required this.name,
+    required this.price,
+    required this.description,
   });
 
 
@@ -22,6 +32,7 @@ class Product extends BaseProduct{
   }
 
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'id': id,

@@ -1,12 +1,18 @@
+import 'package:keyboard_shop/data/model_objects/database/database_entity.dart';
+
 import 'base_user.dart';
 
-class NewUser extends BaseUser {
+class NewUser extends DbEntity implements BaseUser {
   String name;
+  @override
+  String password;
+  @override
+  String phoneNumber;
 
   NewUser({
     required this.name,
-    required super.phoneNumber,
-    required super.password
+    required this.phoneNumber,
+    required this.password
   });
 
 
@@ -19,6 +25,7 @@ class NewUser extends BaseUser {
   }
 
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'name': name,

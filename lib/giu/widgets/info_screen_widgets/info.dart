@@ -48,9 +48,7 @@ class InfoWidget extends StatelessWidget {
                                     .read<FavoritesModel>()
                                     .productDistributor(product);
                               } else {
-                                ScaffoldMessenger.of(context).removeCurrentSnackBar();
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(getSnackBar('Please login'));
+                                showSnackBar(context, 'Please login');
                               }
                             },
                             child: FavoriteIconWidget(id: product.id),
@@ -126,13 +124,9 @@ class InfoWidget extends StatelessWidget {
                               product.name,
                               product.price,
                             );
-                            ScaffoldMessenger.of(context).removeCurrentSnackBar();
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(getSnackBar('Successfully added'));
+                            showSnackBar(context, 'Successfully added');
                           } else {
-                            ScaffoldMessenger.of(context).removeCurrentSnackBar();
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(getSnackBar('Please login'));
+                            showSnackBar(context, 'Please login');
                           }
                         },
                         child: Container(

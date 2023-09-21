@@ -1,4 +1,6 @@
-abstract class BaseProduct {
+import 'package:keyboard_shop/data/model_objects/database/database_entity.dart';
+
+abstract class BaseProduct extends DbEntity {
   int id;
   String image;
   String name;

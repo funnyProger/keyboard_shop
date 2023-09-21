@@ -82,17 +82,9 @@ class ListViewItemWidget extends StatelessWidget {
                                   product.name,
                                   product.price,
                                 );
-                                ScaffoldMessenger.of(context)
-                                    .removeCurrentSnackBar();
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(
-                                    getSnackBar('Successfully added'));
+                                showSnackBar(context, 'Successfully added');
                               } else {
-                                ScaffoldMessenger.of(context)
-                                    .removeCurrentSnackBar();
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(
-                                    getSnackBar('Please login'));
+                                showSnackBar(context, 'Please login');
                               }
                             },
                             child: Container(
@@ -125,18 +117,10 @@ class ListViewItemWidget extends StatelessWidget {
                                 if(context
                                     .read<FavoritesModel>()
                                     .isProductContainsInFavorites(product.id)) {
-                                  ScaffoldMessenger.of(context)
-                                      .removeCurrentSnackBar();
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(
-                                      getSnackBar('Successfully added'));
+                                  showSnackBar(context, 'Successfully added');
                                 }
                               } else {
-                                ScaffoldMessenger.of(context)
-                                    .removeCurrentSnackBar();
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(
-                                    getSnackBar('Please login'));
+                                showSnackBar(context, 'Please login');
                               }
                             },
                             child: FavoriteIconWidget(id: product.id),
@@ -159,18 +143,30 @@ SnackBar getSnackBar(String snackBarMessage) {
 
   final snackBar = SnackBar(
     content: Center(
-      child: Text(snackBarMessage,
+      child: Text(
+          snackBarMessage,
+          textAlign: TextAlign.center,
           style: const TextStyle(fontSize: 14, color: Colors.white),
-          textDirection: TextDirection.ltr),
+          textDirection: TextDirection.ltr
+      ),
     ),
     duration: const Duration(seconds: 1),
     behavior: SnackBarBehavior.floating,
     shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(Radius.circular(100)),
+      borderRadius: BorderRadius.all(Radius.circular(100),
+      ),
     ),
     backgroundColor: Colors.black87,
     margin: const EdgeInsets.only(left: 110, right: 110, bottom: 30),
   );
 
   return snackBar;
+}
+
+void showSnackBar(BuildContext context, String message) {
+  ScaffoldMessenger.of(context)
+      .removeCurrentSnackBar();
+  ScaffoldMessenger.of(context)
+      .showSnackBar(
+      getSnackBar(message));
 }

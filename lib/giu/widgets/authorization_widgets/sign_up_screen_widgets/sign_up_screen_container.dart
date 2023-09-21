@@ -7,8 +7,8 @@ class SignUpScreenContainerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       backgroundColor: const Color.fromARGB(255, 24, 24, 24),
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         backgroundColor: Colors.black,
         title: const Text(
@@ -21,7 +21,9 @@ class SignUpScreenContainerWidget extends StatelessWidget {
         onTap: () {
           FocusScope.of(context).unfocus();
         },
-        child: const SignUpScreenWidget(),
+        child: const SingleChildScrollView(
+          child: SignUpScreenWidget(),
+        ),
       ),
     );
   }

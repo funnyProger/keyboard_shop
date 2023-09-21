@@ -1,14 +1,16 @@
 import 'dart:async';
 import 'package:keyboard_shop/data/get_data/from_database/get_database_data.dart';
+import 'package:keyboard_shop/data/model_objects/database/database_entity.dart';
+import 'package:keyboard_shop/data/model_objects/product/base_product.dart';
 import 'package:keyboard_shop/data/model_objects/user/new_user.dart';
 
 abstract class GetDataFromDatabaseInterface {
   initDatabase();
-  insetIntoTable(Object object, String tableName);
+  insetIntoTable(DbEntity object, String tableName);
   getAllDataFormTable(String tableName);
   deleteDataFromTable(int id, String tableName);
   deleteAllDataFromTable(String tableName);
-  updateDataInTable(Object object, String tableName);
+  updateDataInTableById(BaseProduct object, String tableName);
   getDataBaseTableCount(String tableName);
   getUserByNameOrPhoneNumber(String userName, String phoneNumber);
   getUserByPasswordAndPhoneNumber(String userName, String phoneNumber);
@@ -29,7 +31,7 @@ class DatabaseController {
   }
 
 
-  void addDataToTable(Object object, String tableName) {
+  void addDataToTable(DbEntity object, String tableName) {
     _implementationObject.insetIntoTable(object, tableName);
   }
 
@@ -44,8 +46,8 @@ class DatabaseController {
   }
 
 
-  void updateTableData(Object object, String tableName) {
-    _implementationObject.updateDataInTable(object, tableName);
+  void updateTableDataById(BaseProduct object, String tableName) {
+    _implementationObject.updateDataInTableById(object, tableName);
   }
 
 
@@ -59,7 +61,7 @@ class DatabaseController {
   }
 
 
-  Future<List<NewUser>> isDBContainUserWithThisPasswordOrPhoneNumber(String password, String phoneNumber) async {
+  Future<NewUser?> isDBContainUserWithThisPasswordAndPhoneNumber(String password, String phoneNumber) async {
     return _implementationObject.getUserByPasswordAndPhoneNumber(password, phoneNumber);
   }
 }
