@@ -1,17 +1,28 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:keyboard_shop/data/get_data/shared_preferences/shared_preferences_data.dart';
 import 'package:keyboard_shop/data/model_objects/cart/cart.dart';
 import 'package:keyboard_shop/data/controllers/database_controller.dart';
 import 'package:keyboard_shop/data/model_objects/cart/cart_product.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CartModel extends ChangeNotifier {
   final Cart _cart = Cart.getInstance();
 
 
-  void addToCart(int id, String image, String name, int price) {
+  void updateData() {
+    notifyListeners();
+  }
+
+
+  Future<void> addToCart(int id, String userId, String image, String name, int price) async {
+    SharedPreferences sharPref = await SharedPreferencesData().sharedPreferences;
+    String userId =  sharPref.getString('currentUserName') ?? '';
+
     _cart.add(
         CartProduct(
             id: id,
+            userId: userId,
             image: image,
             name: name,
             price: price

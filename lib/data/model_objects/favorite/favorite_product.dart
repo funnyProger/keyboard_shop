@@ -7,6 +7,8 @@ class FavoriteProduct implements BaseProduct {
   @override
   int id;
   @override
+  String userId;
+  @override
   String image;
   @override
   String name;
@@ -16,6 +18,7 @@ class FavoriteProduct implements BaseProduct {
 
   FavoriteProduct({
     required this.id,
+    required this.userId,
     required this.image,
     required this.name,
     required this.price,
@@ -27,6 +30,7 @@ class FavoriteProduct implements BaseProduct {
   factory FavoriteProduct.fromJson(Map<String, dynamic> map) {
     return FavoriteProduct(
       id: map['id'],
+      userId: map['userId'],
       image: map['image'],
       name: map['name'],
       price: map['price'],
@@ -38,7 +42,7 @@ class FavoriteProduct implements BaseProduct {
   @override
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
+      'userId': userId,
       'image': image,
       'name': name,
       'price': price,

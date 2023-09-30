@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:keyboard_shop/constants/constants.dart';
+import 'package:keyboard_shop/core/models/cart_model.dart';
 import 'package:keyboard_shop/core/models/current_user_model.dart';
+import 'package:keyboard_shop/core/models/favorites_model.dart';
 import 'package:keyboard_shop/data/controllers/database_controller.dart';
 import 'package:keyboard_shop/data/model_objects/user/new_user.dart';
 import 'package:keyboard_shop/giu/widgets/authorization_widgets/sign_up_screen_widgets/sign_up_screen.dart';
 import 'package:keyboard_shop/giu/widgets/main_screen_widgets/catalog/listview_item.dart';
+import 'package:keyboard_shop/root/main.dart';
 import 'package:provider/provider.dart';
 
 class SignInScreenWidget extends StatefulWidget {
@@ -98,8 +101,14 @@ class SignInScreenWidgetState extends State<SignInScreenWidget> {
                                   password: checkUserNameOrPhoneNumberInDB.userDataFromDb.password
                               ),
                             );
-                            showSnackBar(context, 'Successfully');
-                            Navigator.pushNamedAndRemoveUntil(context, 'main', (route) => false);                            }
+                            await initAppData();
+                            if(context.mounted) {
+                              context.read<CartModel>().updateData();
+                              context.read<FavoritesModel>().updateData();
+                              showSnackBar(context, 'Successfully');
+                              Navigator.pushNamedAndRemoveUntil(context, 'main', (route) => false);
+                            }
+                          }
                         } else if(checkUserNameOrPhoneNumberInDB.queryKeyResult == Constants.errorLogin) {
                           if(context.mounted) {
                             showSnackBar(context, 'Incorrect phone number or password');

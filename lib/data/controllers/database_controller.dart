@@ -8,7 +8,7 @@ abstract class GetDataFromDatabaseInterface {
   initDatabase();
   insetIntoTable(DbEntity object, String tableName);
   getAllDataFormTable(String tableName);
-  deleteDataFromTable(int id, String tableName);
+  deleteDataFromTable(String productName, String tableName);
   deleteAllDataFromTable(String tableName);
   updateDataInTableById(BaseProduct object, String tableName);
   getDataBaseTableCount(String tableName);
@@ -36,8 +36,8 @@ class DatabaseController {
   }
 
 
-  void deleteTableData(int id, String tableName) {
-    _implementationObject.deleteDataFromTable(id, tableName);
+  void deleteTableData(String productName, String tableName) {
+    _implementationObject.deleteDataFromTable(productName, tableName);
   }
 
 

@@ -5,14 +5,16 @@ class Constants {
   static const successLogin = 3;
   static const errorLogin = 4;
   static const createCartTableSQL = '''create table if not exists cart (
-            id integer primary key, 
+            id integer primary key autoincrement, 
+            userId text,
             image text,
             name text,
             price integer,
             count integer
             )''';
   static const createFavoritesTableSQL = '''create table if not exists favorites (
-            id integer primary key, 
+            id integer primary key autoincrement, 
+            userId text,
             image text,
             name text,
             price integer,

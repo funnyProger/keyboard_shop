@@ -9,12 +9,7 @@ import '../core/models/cart_model.dart';
 
 
 void main() async {
-
-  WidgetsFlutterBinding.ensureInitialized();
-  await Cart.initList();
-  await Favorites.initList();
-
-
+  await initAppData();
 
   runApp(
     MultiProvider(
@@ -58,4 +53,11 @@ class MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
     );
   }
+}
+
+
+initAppData() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Cart.initList();
+  await Favorites.initList();
 }

@@ -6,6 +6,8 @@ class Product implements BaseProduct {
   @override
   int id;
   @override
+  String userId = '';
+  @override
   String image;
   @override
   String name;
@@ -36,6 +38,7 @@ class Product implements BaseProduct {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'userId': userId,
       'image': image,
       'name': name,
       'price': price,

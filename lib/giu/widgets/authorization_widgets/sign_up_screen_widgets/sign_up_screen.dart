@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:keyboard_shop/constants/constants.dart';
+import 'package:keyboard_shop/core/models/cart_model.dart';
 import 'package:keyboard_shop/core/models/current_user_model.dart';
+import 'package:keyboard_shop/core/models/favorites_model.dart';
 import 'package:keyboard_shop/data/controllers/database_controller.dart';
 import 'package:keyboard_shop/data/model_objects/user/new_user.dart';
 import 'package:keyboard_shop/giu/widgets/authorization_widgets/sign_in_screen_widgets/sign_in_screen_container.dart';
 import 'package:keyboard_shop/giu/widgets/main_screen_widgets/catalog/listview_item.dart';
+import 'package:keyboard_shop/root/main.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 
@@ -172,7 +175,6 @@ class SignUpScreenWidgetState extends State<SignUpScreenWidget> {
                         );
                         if(checkUserNameOrPhoneNumberInDB == Constants.successNewUserCreate) {
                           if(context.mounted) {
-                            showSnackBar(context, 'Successfully');
                             _databaseController.addDataToTable(
                                 NewUser(
                                     name: _inputNameDataController.text,
@@ -190,7 +192,13 @@ class SignUpScreenWidgetState extends State<SignUpScreenWidget> {
                                     password: _inputPasswordDataController.text
                                 ),
                               );
-                              Navigator.pushNamedAndRemoveUntil(context, 'main', (route) => false);
+                              await initAppData();
+                              if(context.mounted) {
+                                context.read<CartModel>().updateData();
+                                context.read<FavoritesModel>().updateData();
+                                showSnackBar(context, 'Successfully');
+                                Navigator.pushNamedAndRemoveUntil(context, 'main', (route) => false);
+                              }
                             }
                           }
                         } else if(checkUserNameOrPhoneNumberInDB == Constants.errorNameInUse) {

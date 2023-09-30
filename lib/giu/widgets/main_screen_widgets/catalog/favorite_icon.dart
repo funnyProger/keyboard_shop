@@ -4,15 +4,15 @@ import 'package:keyboard_shop/core/models/current_user_model.dart';
 import 'package:provider/provider.dart';
 
 class FavoriteIconWidget extends StatelessWidget {
-  const FavoriteIconWidget({super.key, required this.id});
-  final int id;
+  const FavoriteIconWidget({super.key, required this.productName});
+  final String productName;
 
 
   @override
   Widget build(BuildContext context) {
     bool isAddToFavorites =
     context.select<FavoritesModel, bool>((favoriteModelObject) =>
-        favoriteModelObject.isProductContainsInFavorites(id));
+        favoriteModelObject.isProductContainsInFavorites(productName));
 
     if(context.watch<CurrentUserModel>().isCurrentUserLoggedIn()) {
       if (isAddToFavorites) {

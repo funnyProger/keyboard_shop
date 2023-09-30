@@ -1,11 +1,13 @@
 import 'package:keyboard_shop/constants/constants.dart';
 import 'package:keyboard_shop/data/controllers/database_controller.dart';
+import 'package:keyboard_shop/data/get_data/shared_preferences/shared_preferences_data.dart';
 import 'package:keyboard_shop/data/model_objects/cart/cart_product.dart';
 import 'package:keyboard_shop/data/model_objects/database/database_entity.dart';
 import 'package:keyboard_shop/data/model_objects/favorite/favorite_product.dart';
 import 'package:keyboard_shop/data/model_objects/product/base_product.dart';
 import 'package:keyboard_shop/data/model_objects/user/new_user.dart';
 import 'package:path/path.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
 class GetDataFromDatabase implements GetDataFromDatabaseInterface {
@@ -45,18 +47,21 @@ class GetDataFromDatabase implements GetDataFromDatabaseInterface {
   @override
   Future<void> insetIntoTable(DbEntity object, String tableName) async {
     final db = await database;
+
     await db.insert(
       tableName,
       object.toJson(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
 
   @override
   Future<List<Object>> getAllDataFormTable(String tableName) async {
+    SharedPreferences sharPref = await SharedPreferencesData().sharedPreferences;
+    String? userId =  sharPref.getString('currentUserName');
+
     final db = await database;
-    final dataObjects = await db.rawQuery('select * from $tableName');
+    final dataObjects = await db.rawQuery("select * from $tableName where userId = $userId");
 
     if(tableName == 'cart') {
       return dataObjects.map((product) => CartProduct.fromJson(product)).toList();
@@ -71,35 +76,55 @@ class GetDataFromDatabase implements GetDataFromDatabaseInterface {
 
 
   @override
-  Future<void> deleteDataFromTable(int id, String tableName) async {
+  Future<void> deleteDataFromTable(String productName, String tableName) async {
+    SharedPreferences sharPref = await SharedPreferencesData().sharedPreferences;
+    String? userId =  sharPref.getString('currentUserName');
+
     final db = await database;
-    await db.rawDelete('delete from $tableName where id = ?', [id]);
+    await db.delete(
+      tableName,
+      where: 'name = ? and userId = ?',
+      whereArgs: [productName, userId]
+    );
   }
 
 
   @override
   Future<void> deleteAllDataFromTable(String tableName) async {
+    SharedPreferences sharPref = await SharedPreferencesData().sharedPreferences;
+    String userId =  sharPref.getString('currentUserName') ?? '';
+
     final db = await database;
-    await db.rawDelete('delete from $tableName');
+    await db.delete(
+      tableName,
+      where: 'userId = ?',
+      whereArgs: [userId]
+    );
   }
 
 
   @override
   Future<void> updateDataInTableById(BaseProduct object, String tableName) async {
+    SharedPreferences sharPref = await SharedPreferencesData().sharedPreferences;
+    String userId =  sharPref.getString('currentUserName') ?? '';
+
     final db = await database;
     await db.update(
-        tableName,
-        object.toJson(),
-        where: 'id = ?',
-        whereArgs: [object.id]
+      tableName,
+      object.toJson(),
+      where: 'name = ? and userId = ?',
+      whereArgs: [object.name, userId]
     );
   }
 
 
   @override
   Future<int> getDataBaseTableCount(String tableName) async {
+    SharedPreferences sharPref = await SharedPreferencesData().sharedPreferences;
+    String? userId =  sharPref.getString('currentUserName');
+
     final db = await database;
-    int? count = Sqflite.firstIntValue(await db.rawQuery('select sum(count) from $tableName'));
+    int? count = Sqflite.firstIntValue(await db.rawQuery("select sum(count) from $tableName where userId = $userId"));
     return  count ?? 0;
   }
 

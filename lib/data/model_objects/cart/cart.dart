@@ -55,7 +55,7 @@ class Cart {
 
       if(_productList[i].id == id) {
         if(_productList[i].count == 1) {
-          controller.deleteTableData(_productList[i].id, 'cart');
+          controller.deleteTableData(_productList[i].name, 'cart');
           _productList.removeAt(i);
           return;
         } else {

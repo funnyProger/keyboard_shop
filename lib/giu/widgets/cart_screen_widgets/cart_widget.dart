@@ -145,6 +145,7 @@ class CartWidget extends StatelessWidget {
                                   .read<CartModel>()
                                   .addToCart(
                                     basketProductList[index].id,
+                                    basketProductList[index].userId,
                                     basketProductList[index].image,
                                     basketProductList[index].name,
                                     basketProductList[index].price,

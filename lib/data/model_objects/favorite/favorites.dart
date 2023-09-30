@@ -36,11 +36,11 @@ class Favorites {
   }
 
 
-  void delete(int id) {
+  void delete(int id, String productName) {
     for(int i = 0; i < _favoritesList.length; i++) {
       if (_favoritesList[i].id == id) {
         _favoritesList.remove(_favoritesList[i]);
-        controller.deleteTableData(id, 'favorites');
+        controller.deleteTableData(productName, 'favorites');
         return;
       }
     }

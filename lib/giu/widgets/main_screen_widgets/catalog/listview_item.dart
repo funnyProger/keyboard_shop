@@ -78,6 +78,7 @@ class ListViewItemWidget extends StatelessWidget {
                                     .read<CartModel>()
                                     .addToCart(
                                   product.id,
+                                  product.userId,
                                   product.image,
                                   product.name,
                                   product.price,
@@ -116,14 +117,14 @@ class ListViewItemWidget extends StatelessWidget {
                                     .productDistributor(product);
                                 if(context
                                     .read<FavoritesModel>()
-                                    .isProductContainsInFavorites(product.id)) {
+                                    .isProductContainsInFavorites(product.name)) {
                                   showSnackBar(context, 'Successfully added');
                                 }
                               } else {
                                 showSnackBar(context, 'Please login');
                               }
                             },
-                            child: FavoriteIconWidget(id: product.id),
+                            child: FavoriteIconWidget(productName: product.name),
                           ),
                         ),
                       ],

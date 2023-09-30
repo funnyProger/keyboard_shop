@@ -1,27 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:keyboard_shop/data/get_data/shared_preferences/shared_preferences_data.dart';
 import 'package:keyboard_shop/data/model_objects/product/base_product.dart';
 import 'package:keyboard_shop/data/model_objects/favorite/favorite_product.dart';
 import 'package:keyboard_shop/data/model_objects/favorite/favorites.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FavoritesModel extends ChangeNotifier {
   final Favorites _favorites = Favorites.getInstance();
 
+  void updateData() {
+    notifyListeners();
+  }
 
-  void productDistributor<T extends BaseProduct> (T product) {
-    if(isProductContainsInFavorites(product.id)) {
-      deleteFromFavorites(product.id);
+
+  Future<void> productDistributor<T extends BaseProduct> (T product) async {
+    if(isProductContainsInFavorites(product.name)) {
+      deleteFromFavorites(product.id, product.name);
     } else {
+
+      SharedPreferences sharPref = await SharedPreferencesData().sharedPreferences;
+      String userId =  sharPref.getString('currentUserName') ?? '';
+      product.userId = userId;
       addToFavorites(product);
+
     }
     notifyListeners();
   }
 
 
-  bool isProductContainsInFavorites(int id) {
+  bool isProductContainsInFavorites(String productName) {
     bool isProductContains = false;
     List<FavoriteProduct> favoriteProductList = getFavoriteProductList();
     for(int i = 0; i < favoriteProductList.length; i++) {
-      if(favoriteProductList[i].id == id) {
+      if(favoriteProductList[i].name == productName) {
         isProductContains = true;
       }
     }
@@ -42,6 +53,7 @@ class FavoritesModel extends ChangeNotifier {
     } else {
       return FavoriteProduct(
         id: product.id,
+        userId: product.userId,
         image: product.image,
         name: product.name,
         price: product.price,
@@ -52,8 +64,8 @@ class FavoritesModel extends ChangeNotifier {
   }
 
 
-  void deleteFromFavorites(int id) {
-    _favorites.delete(id);
+  void deleteFromFavorites(int id, String productName) {
+    _favorites.delete(id, productName);
   }
 
 
