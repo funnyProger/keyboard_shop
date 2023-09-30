@@ -61,7 +61,7 @@ class GetDataFromDatabase implements GetDataFromDatabaseInterface {
     String? userId =  sharPref.getString('currentUserName');
 
     final db = await database;
-    final dataObjects = await db.rawQuery("select * from $tableName where userId = $userId");
+    final dataObjects = await db.rawQuery("select * from $tableName where userId = ?", [userId]);
 
     if(tableName == 'cart') {
       return dataObjects.map((product) => CartProduct.fromJson(product)).toList();
@@ -124,7 +124,8 @@ class GetDataFromDatabase implements GetDataFromDatabaseInterface {
     String? userId =  sharPref.getString('currentUserName');
 
     final db = await database;
-    int? count = Sqflite.firstIntValue(await db.rawQuery("select sum(count) from $tableName where userId = $userId"));
+
+    int? count = Sqflite.firstIntValue(await db.rawQuery("select sum(count) from $tableName where userId = ?", [userId]));
     return  count ?? 0;
   }
 
