@@ -99,4 +99,13 @@ class Cart {
   bool isEmpty() {
     return _productList.isEmpty;
   }
+
+
+  int getCartCount() {
+    int count = 0;
+    for(int i = 0; i < _productList.length; i++) {
+      count = count + (_productList[i].count);
+    }
+    return count;
+  }
 }

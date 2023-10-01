@@ -154,8 +154,8 @@ class GetDataFromDatabase implements GetDataFromDatabaseInterface {
   @override
   Future<List<int>?> getCurrentUserImage(String currentUserName) async {
     final db = await database;
-    String sqlQuery = "select * from users where name = $currentUserName";
-    final dataObjects = await db.rawQuery(sqlQuery);
+    String sqlQuery = "select * from users where name = ?";
+    final dataObjects = await db.rawQuery(sqlQuery, [currentUserName]);
     List<NewUser> list = dataObjects.map((user) => NewUser.fromJson(user)).toList();
     NewUser? userData = list.isEmpty ? null : list.single;
 

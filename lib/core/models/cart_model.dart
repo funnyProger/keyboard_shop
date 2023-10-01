@@ -49,8 +49,8 @@ class CartModel extends ChangeNotifier {
   }
 
 
-  Future<int> getCartCount() async {
-    return DatabaseController().getTableCount('cart');
+  int getCartCount() {
+    return _cart.getCartCount();
   }
 
 
