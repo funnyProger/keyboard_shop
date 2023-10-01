@@ -1,11 +1,16 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:keyboard_shop/constants/constants.dart';
 import 'package:keyboard_shop/core/models/cart_model.dart';
 import 'package:keyboard_shop/core/models/current_user_model.dart';
 import 'package:keyboard_shop/core/models/favorites_model.dart';
 import 'package:keyboard_shop/data/controllers/database_controller.dart';
+import 'package:keyboard_shop/data/controllers/device_storage_controller.dart';
 import 'package:keyboard_shop/data/model_objects/user/new_user.dart';
 import 'package:keyboard_shop/giu/widgets/authorization_widgets/sign_in_screen_widgets/sign_in_screen_container.dart';
 import 'package:keyboard_shop/giu/widgets/main_screen_widgets/catalog/listview_item.dart';
@@ -26,6 +31,8 @@ class SignUpScreenWidgetState extends State<SignUpScreenWidget> {
   final _inputPasswordDataController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final DatabaseController _databaseController = DatabaseController();
+  final DeviceStorageController _deviceStorageController = DeviceStorageController();
+  File? _pickedImage;
 
 
   @override
@@ -34,6 +41,16 @@ class SignUpScreenWidgetState extends State<SignUpScreenWidget> {
     _inputPhoneNumberDataController.dispose();
     _inputPasswordDataController.dispose();
     super.dispose();
+  }
+
+
+  getImageFromDevice() async {
+    XFile? imageFile = await _deviceStorageController.getGalleryData();
+    if(imageFile != null) {
+      setState(() {
+        _pickedImage = File(imageFile.path);
+      });
+    }
   }
 
 
@@ -68,12 +85,20 @@ class SignUpScreenWidgetState extends State<SignUpScreenWidget> {
               height: 200,
                 alignment: Alignment.center,
                 child: InkWell(
+                    onTap: () {
+                      getImageFromDevice();
+                    },
                     borderRadius: BorderRadius.circular(100),
-                    child: CircleAvatar(
-                      backgroundColor: Colors.black54,
-                      radius: 100,
-                      child: SvgPicture.asset('assets/images/default_male_avatar_1.svg'),
-                    )
+                    child: _pickedImage == null ? CircleAvatar(
+                        backgroundColor: Colors.black54,
+                        radius: 100,
+                        child: SvgPicture.asset('assets/images/default_male_avatar_1.svg')
+                    ) :
+                        CircleAvatar(
+                          backgroundColor: Colors.black54,
+                          radius: 100,
+                          backgroundImage: Image.file(File(_pickedImage!.path)).image,
+                        )
                 )
             ),
             Container(
@@ -177,6 +202,7 @@ class SignUpScreenWidgetState extends State<SignUpScreenWidget> {
                           if(context.mounted) {
                             _databaseController.addDataToTable(
                                 NewUser(
+                                    image: _pickedImage == null ? null : getBlobImageFile(_pickedImage!),
                                     name: _inputNameDataController.text,
                                     phoneNumber: '+7 ${_inputPhoneNumberDataController.text}',
                                     password: _inputPasswordDataController.text
@@ -187,6 +213,7 @@ class SignUpScreenWidgetState extends State<SignUpScreenWidget> {
                               context.read<CurrentUserModel>().setCurrentUserAndSharedPreferencesData(
                                 true,
                                 NewUser(
+                                    image: _pickedImage == null ? null : getBlobImageFile(_pickedImage!),
                                     name: _inputNameDataController.text,
                                     phoneNumber: '+7 ${_inputPhoneNumberDataController.text}',
                                     password: _inputPasswordDataController.text
@@ -420,6 +447,16 @@ Future<int> isUserWithThisNameOrPhoneNumberAlreadyExists(String userName, String
   return isUserWithThisNameOrPhoneNumberAlreadyExists;
 }
 
+List<int> getBlobImageFile(File imageFile) {
+  Uint8List imageFileAsBytesList = imageFile.readAsBytesSync();
+  return imageFileAsBytesList;
+}
+
+File? getFileImageFromBlob(List<int>? imageFileAsBytesList) {
+  File? imageFile = File.fromRawPath(imageFileAsBytesList as Uint8List);
+  return imageFile;
+}
+
 
 
 MaskTextInputFormatter getPhoneNumberMaskFormatter() {
@@ -429,3 +466,4 @@ MaskTextInputFormatter getPhoneNumberMaskFormatter() {
     type: MaskAutoCompletionType.lazy,
   );
 }
+

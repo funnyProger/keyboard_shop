@@ -5,12 +5,8 @@ class GetDeviceData implements DeviceStorageControllerInterface {
 
 
   @override
-  Future getDataFromGallery() async {
+  Future<XFile?> getDataFromGallery() async {
     final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if(pickedFile == null) {
-       return null;
-    } else {
-      return  pickedFile;
-    }
+    return pickedFile;
   }
 }

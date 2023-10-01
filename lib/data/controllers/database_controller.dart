@@ -10,10 +10,11 @@ abstract class GetDataFromDatabaseInterface {
   getAllDataFormTable(String tableName);
   deleteDataFromTable(String productName, String tableName);
   deleteAllDataFromTable(String tableName);
-  updateDataInTableById(BaseProduct object, String tableName);
+  updateDataInTableByName(BaseProduct object, String tableName);
   getDataBaseTableCount(String tableName);
   getUserByNameOrPhoneNumber(String userName, String phoneNumber);
   getUserByPasswordAndPhoneNumber(String userName, String phoneNumber);
+  getCurrentUserImage(String currentUserName);
 }
 
 
@@ -46,8 +47,8 @@ class DatabaseController {
   }
 
 
-  void updateTableDataById(BaseProduct object, String tableName) {
-    _implementationObject.updateDataInTableById(object, tableName);
+  void updateTableDataByName(BaseProduct object, String tableName) {
+    _implementationObject.updateDataInTableByName(object, tableName);
   }
 
 
@@ -63,5 +64,10 @@ class DatabaseController {
 
   Future<NewUser?> isDBContainUserWithThisPasswordAndPhoneNumber(String password, String phoneNumber) async {
     return _implementationObject.getUserByPasswordAndPhoneNumber(password, phoneNumber);
+  }
+
+
+  Future<List<int>?> getCurrentUserImageFromDBbyName(String currentUserName) async {
+    return _implementationObject.getCurrentUserImage(currentUserName);
   }
 }

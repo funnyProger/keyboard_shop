@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:keyboard_shop/core/models/current_user_model.dart';
@@ -29,11 +30,15 @@ class UserProfileWidget extends StatelessWidget {
           flex: 10,
           child: Container(
             alignment: Alignment.center,
-            child: SvgPicture.asset(
-              'assets/images/default_female_avatar_1.svg',
-              height: 300,
-              width: 300,
-            ),
+            child: CircleAvatar(
+              backgroundColor: Colors.transparent,
+              radius: 100,
+              child: SvgPicture.asset(
+                'assets/images/default_female_avatar_1.svg',
+                height: 200,
+                width: 200,
+              ),
+            )
           ),
         ),
         Expanded(
@@ -91,19 +96,25 @@ class UserProfileWidget extends StatelessWidget {
   }
 
   Widget userProfile(BuildContext context) {
+
     return Column(
       children: [
         Expanded(
           flex: 10,
-          child: CircleAvatar(
-              backgroundColor: Colors.black54,
-              radius: 110,
+          child: context.watch<CurrentUserModel>().getCurrentUserImage() == null ? CircleAvatar(
+              backgroundColor: Colors.transparent,
+              radius: 100,
               child: SvgPicture.asset(
                 'assets/images/default_female_avatar_1.svg',
-                height: 300,
-                width: 300,
+                height: 200,
+                width: 200,
               )
-          ),
+          ) :
+          CircleAvatar(
+            backgroundColor: Colors.transparent,
+            radius: 110,
+            backgroundImage: Image.memory(context.read<CurrentUserModel>().getCurrentUserImage() as Uint8List).image,
+          )
         ),
         Expanded(
           flex: 5,

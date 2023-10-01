@@ -28,14 +28,14 @@ class GetDataFromDatabase implements GetDataFromDatabaseInterface {
   Future<Database> initDatabase() async {
     Database database = await openDatabase(
       join(await getDatabasesPath(), 'keyboard_shop.db'),
-      version: 2,
+      version: 1,
       onCreate: (Database db, int version) async {
         await db.execute(Constants.createCartTableSQL);
         await db.execute(Constants.createFavoritesTableSQL);
         await db.execute(Constants.createUsersTableSQL);
       },
       onUpgrade: (Database db, int oldVersion, int newVersion) async {
-        if(oldVersion < 2) {
+        if(oldVersion < 1) {
           await db.execute(Constants.createUsersTableSQL);
         }
       },
@@ -104,7 +104,7 @@ class GetDataFromDatabase implements GetDataFromDatabaseInterface {
 
 
   @override
-  Future<void> updateDataInTableById(BaseProduct object, String tableName) async {
+  Future<void> updateDataInTableByName(BaseProduct object, String tableName) async {
     SharedPreferences sharPref = await SharedPreferencesData().sharedPreferences;
     String userId =  sharPref.getString('currentUserName') ?? '';
 
@@ -148,5 +148,17 @@ class GetDataFromDatabase implements GetDataFromDatabaseInterface {
     List<NewUser> list = dataObjects.map((user) => NewUser.fromJson(user)).toList();
     NewUser? userData = list.isEmpty ? null : list.single;
     return userData;
+  }
+
+
+  @override
+  Future<List<int>?> getCurrentUserImage(String currentUserName) async {
+    final db = await database;
+    String sqlQuery = "select * from users where name = $currentUserName";
+    final dataObjects = await db.rawQuery(sqlQuery);
+    List<NewUser> list = dataObjects.map((user) => NewUser.fromJson(user)).toList();
+    NewUser? userData = list.isEmpty ? null : list.single;
+
+    return userData?.image;
   }
 }

@@ -22,6 +22,7 @@ class Constants {
             )''';
   static const createUsersTableSQL = '''create table if not exists users (
               id integer primary key autoincrement, 
+              image blob,
               name text,
               phoneNumber text,
               password text

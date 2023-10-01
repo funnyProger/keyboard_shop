@@ -88,6 +88,7 @@ class SignInScreenWidgetState extends State<SignInScreenWidget> {
                           && _formKey.currentState!.validate()) {
                         ({int queryKeyResult, NewUser userDataFromDb}) checkUserNameOrPhoneNumberInDB =
                         await checkEnteredDataInDatabase(
+                          context,
                           _inputPasswordDataController.value.text,
                           '+7 ${_inputPhoneNumberDataController.value.text}',
                         );
@@ -96,6 +97,7 @@ class SignInScreenWidgetState extends State<SignInScreenWidget> {
                             context.read<CurrentUserModel>().setCurrentUserAndSharedPreferencesData(
                               true,
                               NewUser(
+                                  image:  checkUserNameOrPhoneNumberInDB.userDataFromDb.image,
                                   name: checkUserNameOrPhoneNumberInDB.userDataFromDb.name,
                                   phoneNumber: checkUserNameOrPhoneNumberInDB.userDataFromDb.phoneNumber,
                                   password: checkUserNameOrPhoneNumberInDB.userDataFromDb.password
@@ -152,13 +154,14 @@ class SignInScreenWidgetState extends State<SignInScreenWidget> {
 }
 
 
-Future<({int queryKeyResult, NewUser userDataFromDb})> checkEnteredDataInDatabase(String password, String phoneNumber) async {
+Future<({int queryKeyResult, NewUser userDataFromDb})> checkEnteredDataInDatabase(BuildContext context, String password, String phoneNumber) async {
   ({int queryKeyResult, NewUser userDataFromDb})  databaseQueryResult =
         (queryKeyResult: Constants.errorLogin, userDataFromDb: NewUser(
             name: '', phoneNumber: '', password: ''));
 
   NewUser? userData =
       await DatabaseController().isDBContainUserWithThisPasswordAndPhoneNumber(password, phoneNumber);
+
   if(userData != null) {
     databaseQueryResult = (queryKeyResult: Constants.successLogin, userDataFromDb: userData);
   }
